@@ -7,10 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
+#import "Categories.h"
+@class Quote;
+@class Categories;
+@interface iReflectDetailViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 
-@interface iReflectDetailViewController : UIViewController
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
-@property (strong, nonatomic) id detailItem;
+@property (strong, nonatomic) Categories *cate;
+@property (strong,nonatomic) Quote *quoteObject;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+
+- (IBAction)done:(UIStoryboardSegue *)segue;
+- (IBAction)cancel:(UIStoryboardSegue *)segue;
+
 @end

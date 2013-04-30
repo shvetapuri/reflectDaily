@@ -9,6 +9,8 @@
 #import "iReflectAppDelegate.h"
 
 #import "iReflectMasterViewController.h"
+#import "Quote.h"
+#import "Categories.h"
 
 @implementation iReflectAppDelegate
 
@@ -16,15 +18,210 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (void)customizeAppearance
 {
+    // Create resizable images
+//    UIImage *gradientImage44 = [[UIImage imageNamed:@"tabBar_textured_44"]
+//                                resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+//    UIImage *gradientImage32 = [[UIImage imageNamed:@"tabBar_gradient_textured_32"]
+//                                resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+//    
+//    // Set the background image for *all* UINavigationBars
+//    [[UINavigationBar appearance] setBackgroundImage:gradientImage44
+//                                       forBarMetrics:UIBarMetricsDefault];
+//    [[UINavigationBar appearance] setBackgroundImage:gradientImage32
+//                                       forBarMetrics:UIBarMetricsLandscapePhone];
+    
+    [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
+     
+    
+//    // Customize the title text for *all* UINavigationBars
+//    [[UINavigationBar appearance] setTitleTextAttributes:
+//     [NSDictionary dictionaryWithObjectsAndKeys:
+//      [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],
+//      UITextAttributeTextColor,
+//      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],
+//      UITextAttributeTextShadowColor,
+//      [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
+//      UITextAttributeTextShadowOffset,
+//      [UIFont fontWithName:@"Arial-Bold" size:0.0],
+//      UITextAttributeFont, 
+//      nil]];
+//    
+
+//    UIImage *button30 = [[UIImage imageNamed:@"button_textured_30"]
+//                         resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+//    UIImage *button24 = [[UIImage imageNamed:@"button_textured_24"]
+//                         resizableImageWithCapInsets:UIEdgeInsetsMake(0, 5, 0, 5)];
+//    [[UIBarButtonItem appearance] setBackgroundImage:button30 forState:UIControlStateNormal
+//                                          barMetrics:UIBarMetricsDefault];
+//    [[UIBarButtonItem appearance] setBackgroundImage:button24 forState:UIControlStateNormal
+//                                          barMetrics:UIBarMetricsLandscapePhone];
+    
+//    [[UIBarButtonItem appearance] setTitleTextAttributes:
+//     [NSDictionary dictionaryWithObjectsAndKeys:
+//      [UIColor colorWithRed:220.0/255.0 green:104.0/255.0 blue:1.0/255.0 alpha:1.0],
+//      UITextAttributeTextColor,
+//      [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0],
+//      UITextAttributeTextShadowColor,
+//      [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+//      UITextAttributeTextShadowOffset,
+//      [UIFont fontWithName:@"AmericanTypewriter" size:0.0],
+//      UITextAttributeFont, 
+//      nil] 
+//                                                forState:UIControlStateNormal];
+    
+    
+//    UIImage *buttonBack30 = [[UIImage imageNamed:@"button_back_textured_30"]
+//                             resizableImageWithCapInsets:UIEdgeInsetsMake(0, 13, 0, 5)];
+//    UIImage *buttonBack24 = [[UIImage imageNamed:@"button_back_textured_24"]
+//                             resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12, 0, 5)];
+//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:buttonBack30
+//                                                      forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:buttonBack24
+//                                                      forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+    
+    
+}
+
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+
+{
+
+    [self customizeAppearance];
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     iReflectMasterViewController *controller = (iReflectMasterViewController *)navigationController.topViewController;
+    navigationController.toolbarHidden=NO;
+    
     controller.managedObjectContext = self.managedObjectContext;
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults objectForKey:@"firstRun"])
+    {
+        [defaults setObject:[NSDate date] forKey:@"firstRun"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self loadDataFromPropertyList];
+    }
+
+    
+//    UILocalNotification *notification = [launchOptions objectForKey:
+//                                         UIApplicationLaunchOptionsLocalNotificationKey];
+//    
+//    if (notification) {
+//        
+//        [self.window addSubview:controller.view];
+//        [self.window makeKeyAndVisible];
+//        
+//    }
+    
+    
+    
+ //   NSManagedObjectContext *context = [self managedObjectContext];
+  
+//    Categories *cate = [NSEntityDescription
+//                                       insertNewObjectForEntityForName:@"Categories"
+//                                       inManagedObjectContext:context];
+//    cate.name=@"Wisdom" ;
+//    //quote.timeStamp=[NSDate date];
+//    Quote *quo = [NSEntityDescription insertNewObjectForEntityForName:@"Quote"
+//                                             inManagedObjectContext:context] ;
+//    quo.category = cate;
+//    quo.quoteEntry = @"to be or not to be";
+//    quo.timeStamp = [NSDate date];
+//    cate.quote = [[NSSet alloc] initWithObjects:quo, nil];
+//
+//    
+//    Quote *quo2 = [NSEntityDescription insertNewObjectForEntityForName:@"Quote"
+//                                               inManagedObjectContext:context] ;
+//    quo2.category = cate;
+//    quo2.quoteEntry = @"be the change";
+//    quo2.timeStamp = [NSDate date];
+//    
+//    [cate addQuoteObject:quo2];
+//    
+//    
+//    NSError *error;
+//    if (![context save:&error]) {
+//        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+//    }
+//    
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription
+//                                   entityForName:@"Categories" inManagedObjectContext:context];
+//    [fetchRequest setEntity:entity];
+//    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+//    for (Categories *info in fetchedObjects) {
+//    
+//        NSLog(@"Category: %@", info.name);
+//       // NSLog(@"Quote: %@", info.quote.quoteEntry);
+//    }
+//    
+//    NSFetchRequest *fetchRequest1 = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity1 = [NSEntityDescription
+//                                   entityForName:@"Quote" inManagedObjectContext:context];
+//    [fetchRequest1 setEntity:entity1];
+//    NSArray *fetchedObjects1 = [context executeFetchRequest:fetchRequest1 error:&error];
+//    for (Quote *info in fetchedObjects1) {
+//       // NSLog(@"Category: %@", info.name);
+//        NSLog(@"Quote: %@", info.quoteEntry);
+//    }
+   
+    
+    
     return YES;
 }
-							
+
+- (void)loadDataFromPropertyList {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"quoteData" ofType:@"plist"];
+    NSArray *items = [NSArray arrayWithContentsOfFile:path];
+    
+    NSManagedObjectContext *ctx = self.managedObjectContext;
+    
+    for (NSDictionary *dict in items) {
+        Categories *c = [NSEntityDescription insertNewObjectForEntityForName:@"Categories" inManagedObjectContext:ctx];
+        
+        [c setName:[dict objectForKey:@"name"]];
+        
+        NSArray *quotes = [dict objectForKey:@"quoteEntry"];
+        
+        for(int i=0; i<=(([quotes count]/2)+1);i=i+2) {
+            
+            Quote *q = [NSEntityDescription insertNewObjectForEntityForName:@"Quote" inManagedObjectContext:ctx];
+            NSLog(@"here is i : %d",i);
+            q.quoteEntry=[quotes objectAtIndex:i];
+            q.author =[quotes objectAtIndex:i+1];
+            q.category=c;
+            [c addQuoteObject:q];
+            
+        }
+     
+    }
+    
+    NSError *err = nil;
+    [ctx save:&err];
+    
+    if (err != nil) {
+        NSLog(@"error saving managed object context: %@", err);
+    }
+}
+
+- (void)application:(UIApplication *)application
+didReceiveLocalNotification:(UILocalNotification *)notification {
+
+//    UIApplicationState applicationState = application.applicationState;
+//    if (applicationState == UIApplicationStateActive) {
+//        [application presentLocalNotificationNow:notification];
+  //  }
+    
+   // [self scheduleQuotes];
+}
+
+-(void)scheduleQuotes
+{
+    
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -45,11 +242,13 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Saves changes in the application's managed object context before the application terminates.
+    
     [self saveContext];
 }
 

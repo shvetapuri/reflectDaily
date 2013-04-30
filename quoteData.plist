@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>Don&apos;t Worry Be Happy</string>
+			<string>author1</string>
+			<string>Happy happy joy joy</string>
+			<string>author2</string>
+			<string>Smile!</string>
+			<string>none</string>
+		</array>
+		<key>name</key>
+		<string>Happiness</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>The Only true wisdom is knowing that you know nothing</string>
+			<string>Socrates</string>
+			<string>Wisdom Begins in wonder</string>
+			<string>Socrates</string>
+		</array>
+		<key>name</key>
+		<string>Wisdom</string>
+	</dict>
+</array>
+</plist>
