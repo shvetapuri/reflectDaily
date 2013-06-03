@@ -32,7 +32,7 @@
 //    [[UINavigationBar appearance] setBackgroundImage:gradientImage32
 //                                       forBarMetrics:UIBarMetricsLandscapePhone];
     
-    [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
+   // [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
      
     
 //    // Customize the title text for *all* UINavigationBars
@@ -184,7 +184,9 @@
         
         [c setName:[dict objectForKey:@"name"]];
         
+        if([[dict objectForKey:@"quoteEntry"] count]) {
         NSArray *quotes = [dict objectForKey:@"quoteEntry"];
+        
         
         for(int i=0; i<=(([quotes count]/2)+1);i=i+2) {
             
@@ -196,7 +198,7 @@
             [c addQuoteObject:q];
             
         }
-     
+        }
     }
     
     NSError *err = nil;

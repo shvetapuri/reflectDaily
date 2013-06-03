@@ -10,6 +10,7 @@
 
 @interface iReflectAddCategoryViewController : UITableViewController<UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *categoryInput;
+//@property (weak, nonatomic) IBOutlet UITextField *categoryInput;
+@property (weak, nonatomic) IBOutlet UITextView *categoryInput;
 
 @end

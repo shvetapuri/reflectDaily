@@ -124,6 +124,20 @@ return cell;
 
 }
 
+-(void)uncheckAllRows:(UITableView *)tableView
+{
+    for (int j = 0; j < [self.categoryArray count]; j++) {
+        int i = 0;
+        NSUInteger ints[2]={i,j};
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+        
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType=UITableViewCellAccessoryNone;
+        
+    }
+    
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -198,25 +212,20 @@ return cell;
             //if row selected, save in selectedCategories
             [self.selectedCategoryArray addObject:[self.categoryArray objectAtIndex:indexPath.row]];
         }
-    } //if checkmark
-   
-    else if([[self.categoryArray objectAtIndex:indexPath.row] isEqualToString:@"all"]) {
+    }
+    //else if checkmark
+   else
+       
+   {
+       if([[self.categoryArray objectAtIndex:indexPath.row] isEqualToString:@"all"]) {
         thisCell.accessoryType = UITableViewCellAccessoryNone;
-        for (int j = 0; j < [tableView numberOfRowsInSection:0]; j++) {
-            int i = 0;
-            NSUInteger ints[2]={i,j};
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-            
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            cell.accessoryType=UITableViewCellAccessoryNone;
-            
-        }
+        
+        [self uncheckAllRows:tableView];
         [self.selectedRows removeAllObjects];
         [self.selectedCategoryArray removeAllObjects];
         
         
-        
+        //if you select a row with a checkmark and the all row is not selected deselect
     } else if (![[self.selectedCategoryArray objectAtIndex:0] isEqualToString:@"all"]) {
         
         
@@ -226,8 +235,26 @@ return cell;
         [self.selectedCategoryArray removeObject:[self.categoryArray objectAtIndex:indexPath.row]];
         
         
+        //if you select a row with a checkmark and the "all" row is selected then deselect all except the row you selected
+    } else if([[self.selectedCategoryArray objectAtIndex:0] isEqualToString:@"all"]){
+        
+        [self uncheckAllRows:tableView];
+        [self.selectedRows removeAllObjects];
+        [self.selectedCategoryArray removeAllObjects];
+        
+        //select only the current row
+        thisCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        
+        NSString *categoryInRow = thisCell.textLabel.text;
+        [self.selectedRows setObject:categoryInRow forKey:keyString];
+        //add object in an array
+        //if row selected, save in selectedCategories
+        [self.selectedCategoryArray addObject:[self.categoryArray objectAtIndex:indexPath.row]];
+
+        
         
     }
+   }
     //[tableView reloadData];
     // Navigation logic may go here. Create and push another view controller.
     /*

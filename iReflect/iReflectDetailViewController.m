@@ -60,8 +60,7 @@
 		exit(-1);  // Fail
 	}
     
-    
-    self.title = @"Quotes" ;
+    self.title = self.cate.name ;
 
     
   //  [self configureView];
@@ -191,8 +190,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if(![self.cate.name isEqualToString:@"Favorites"]) {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
+    } else {
+        return [self.favoriteQuotes count];
+    }
 //
  //   return 2;
 }
@@ -222,9 +225,28 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    NSLog(@"favorites %@",self.cate.name);
+    if(![self.cate.name isEqualToString:@"Favorites"]) {
+        [self configureCell:cell atIndexPath:indexPath];
+    } else {
+        [self configureFavoritesCell:cell atIndexPath:indexPath];
+
+    }
     
     return cell;
+}
+
+- (void)configureFavoritesCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    if(self.favoriteQuotes) {
+        Quote *object = [self.favoriteQuotes objectAtIndex:indexPath.row];
+        cell.textLabel.text = object.quoteEntry;
+        
+        UIFont *myFont = [ UIFont fontWithName: @"System" size: 17.0 ];
+        cell.textLabel.font  = myFont;
+    } else {
+        NSLog(@"none");
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -259,8 +281,12 @@
 {
     if ([[segue identifier] isEqualToString:@"quoteDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        
-        Quote *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        Quote *object;
+        if(![self.cate.name isEqualToString:@"Favorites"]) {
+            object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+        } else {
+            object = [self.favoriteQuotes objectAtIndex:indexPath.row];
+        }
         iReflectQuoteDetailViewController *qvc =[segue destinationViewController];
         qvc.quoteObject=object;
         self.quoteObject=object;

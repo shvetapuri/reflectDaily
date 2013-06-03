@@ -17,6 +17,8 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @property (strong, nonatomic) Categories *cate;
+@property (strong,nonatomic) NSArray *favoriteQuotes;
+
 @property (strong,nonatomic) Quote *quoteObject;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;

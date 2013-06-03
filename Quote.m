@@ -16,5 +16,6 @@
 @dynamic timeStamp;
 @dynamic category;
 @dynamic author;
+@dynamic favorite;
 
 @end

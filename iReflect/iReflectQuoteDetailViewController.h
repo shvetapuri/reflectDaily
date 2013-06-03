@@ -24,6 +24,7 @@
 //@property (strong, nonatomic) IBOutlet UILabel *authorOut;
 @property (weak, nonatomic) IBOutlet UILabel *timeOut;
 @property (weak, nonatomic) IBOutlet UILabel *scheduledTimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favoriteLabel;
 
 @property (strong,nonatomic) Quote *quoteObject;
 @property (strong, nonatomic) NSString *category;

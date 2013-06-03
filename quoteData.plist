@@ -4,6 +4,12 @@
 <array>
 	<dict>
 		<key>quoteEntry</key>
+		<array/>
+		<key>name</key>
+		<string>Favorites</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
 		<array>
 			<string>Don&apos;t Worry Be Happy</string>
 			<string>author1</string>

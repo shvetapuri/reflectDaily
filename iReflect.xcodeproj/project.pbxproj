@@ -29,6 +29,9 @@
 		E653EB9916979F4400184C06 /* iReflectScheduleQuotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E653EB9816979F4400184C06 /* iReflectScheduleQuotesViewController.m */; };
 		E65812A6171BBA0A003845FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65812A5171BBA0A003845FD /* QuartzCore.framework */; };
 		E661B13F16CDEFFD0099FBE6 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = E661B13E16CDEFFD0099FBE6 /* View.xib */; };
+		E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */; };
+		E66AE574174D7070000E2A72 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = E66AE573174D7070000E2A72 /* star.png */; };
+		E66AE576174D77A6000E2A72 /* star_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = E66AE575174D77A6000E2A72 /* star_gray.png */; };
 		E68E079016AA5C680046FF41 /* Quote.m in Sources */ = {isa = PBXBuildFile; fileRef = E68E078F16AA5C680046FF41 /* Quote.m */; };
 		E68E079316AA5C900046FF41 /* Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = E68E079216AA5C900046FF41 /* Categories.m */; };
 		E6B087B716BDB62E000BE8D1 /* iReflectAddQuoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B087B616BDB62E000BE8D1 /* iReflectAddQuoteViewController.m */; };
@@ -37,6 +40,7 @@
 		E6D1ECE8172C815300EAE7FD /* tabBar_textured_32.png in Resources */ = {isa = PBXBuildFile; fileRef = E6D1ECE7172C815300EAE7FD /* tabBar_textured_32.png */; };
 		E6D1ECEA172C815900EAE7FD /* tabBar_textured_44.png in Resources */ = {isa = PBXBuildFile; fileRef = E6D1ECE9172C815900EAE7FD /* tabBar_textured_44.png */; };
 		E6D55A1A1708E63600995E69 /* iReflectCategorySelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D55A191708E63600995E69 /* iReflectCategorySelectViewController.m */; };
+		E6E050BE173AF47600BC2CAE /* IMG_2010.PNG in Resources */ = {isa = PBXBuildFile; fileRef = E6E050BD173AF47600BC2CAE /* IMG_2010.PNG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +75,10 @@
 		E653EB9816979F4400184C06 /* iReflectScheduleQuotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectScheduleQuotesViewController.m; sourceTree = "<group>"; };
 		E65812A5171BBA0A003845FD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E661B13E16CDEFFD0099FBE6 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
+		E66AE570174C168C000E2A72 /* iReflectMainPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectMainPageViewController.h; sourceTree = "<group>"; };
+		E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectMainPageViewController.m; sourceTree = "<group>"; };
+		E66AE573174D7070000E2A72 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = ../../Documents/iphone/TasteBankPics/star.png; sourceTree = "<group>"; };
+		E66AE575174D77A6000E2A72 /* star_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star_gray.png; path = ../../Documents/iphone/iReflectPics/star_gray.png; sourceTree = "<group>"; };
 		E68E078E16AA5C680046FF41 /* Quote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quote.h; path = ../Quote.h; sourceTree = "<group>"; };
 		E68E078F16AA5C680046FF41 /* Quote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Quote.m; path = ../Quote.m; sourceTree = "<group>"; };
 		E68E079116AA5C8F0046FF41 /* Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Categories.h; sourceTree = "<group>"; };
@@ -84,6 +92,7 @@
 		E6D1ECE9172C815900EAE7FD /* tabBar_textured_44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tabBar_textured_44.png; path = ../../Documents/iphone/iReflectPics/tabBar_textured_44.png; sourceTree = "<group>"; };
 		E6D55A181708E63600995E69 /* iReflectCategorySelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectCategorySelectViewController.h; sourceTree = "<group>"; };
 		E6D55A191708E63600995E69 /* iReflectCategorySelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectCategorySelectViewController.m; sourceTree = "<group>"; };
+		E6E050BD173AF47600BC2CAE /* IMG_2010.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IMG_2010.PNG; path = ../../Desktop/IMG_2010.PNG; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,11 +114,14 @@
 		E653EB5D16979EEB00184C06 = {
 			isa = PBXGroup;
 			children = (
+				E6E050BD173AF47600BC2CAE /* IMG_2010.PNG */,
 				E60A327C1724F37A00A56871 /* iReflectIcon_114.png */,
 				E6D1ECE7172C815300EAE7FD /* tabBar_textured_32.png */,
 				E6D1ECE9172C815900EAE7FD /* tabBar_textured_44.png */,
 				E6D1ECE5172C7B5F00EAE7FD /* tableview_bkgnd.png */,
 				E60A327E1724F38300A56871 /* iReflectIcon_57.png */,
+				E66AE575174D77A6000E2A72 /* star_gray.png */,
+				E66AE573174D7070000E2A72 /* star.png */,
 				E653EB7416979EEB00184C06 /* iReflect */,
 				E653EB6B16979EEB00184C06 /* Frameworks */,
 				E653EB6916979EEB00184C06 /* Products */,
@@ -142,6 +154,8 @@
 				E653EB7D16979EEB00184C06 /* iReflectAppDelegate.h */,
 				E653EB7E16979EEB00184C06 /* iReflectAppDelegate.m */,
 				E653EB8616979EEB00184C06 /* MainStoryboard.storyboard */,
+				E66AE570174C168C000E2A72 /* iReflectMainPageViewController.h */,
+				E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */,
 				E60E15ED172213B200D8CCA3 /* iReflectEditQuoteViewController.h */,
 				E60E15EE172213B300D8CCA3 /* iReflectEditQuoteViewController.m */,
 				E6D55A181708E63600995E69 /* iReflectCategorySelectViewController.h */,
@@ -248,6 +262,9 @@
 				E6D1ECE6172C7B5F00EAE7FD /* tableview_bkgnd.png in Resources */,
 				E6D1ECE8172C815300EAE7FD /* tabBar_textured_32.png in Resources */,
 				E6D1ECEA172C815900EAE7FD /* tabBar_textured_44.png in Resources */,
+				E6E050BE173AF47600BC2CAE /* IMG_2010.PNG in Resources */,
+				E66AE574174D7070000E2A72 /* star.png in Resources */,
+				E66AE576174D77A6000E2A72 /* star_gray.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +288,7 @@
 				E60AA5B716D3248A0089D76C /* iReflectQuoteDetailViewController.m in Sources */,
 				E6D55A1A1708E63600995E69 /* iReflectCategorySelectViewController.m in Sources */,
 				E60E15EF172213B300D8CCA3 /* iReflectEditQuoteViewController.m in Sources */,
+				E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

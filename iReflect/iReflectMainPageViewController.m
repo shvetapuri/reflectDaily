@@ -7,12 +7,13 @@
 //
 
 #import "iReflectMainPageViewController.h"
-
+#import "iReflectMasterViewController.h"
 @interface iReflectMainPageViewController ()
 
 @end
 
 @implementation iReflectMainPageViewController
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -21,6 +22,10 @@
         // Custom initialization
     }
     return self;
+}
+- (IBAction)goToFolders {
+    iReflectMasterViewController *view = [self.storyboard instantiateViewControllerWithIdentifier:@"masterView"];
+    [self.navigationController pushViewController:view animated:YES];
 }
 
 - (void)viewDidLoad

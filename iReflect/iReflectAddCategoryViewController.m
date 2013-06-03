@@ -7,6 +7,7 @@
 //
 
 #import "iReflectAddCategoryViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface iReflectAddCategoryViewController ()
 
@@ -33,11 +34,19 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.categoryInput.layer.cornerRadius = 5;
+    self.categoryInput.clipsToBounds = YES;
+    [self.categoryInput.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
+    [self.categoryInput.layer setBorderWidth:2.0];
+
+    
+    
 }
 
--(BOOL) textFieldShouldReturn:(UITextField *) textField {
-    if(textField == self.categoryInput){
-        [textField resignFirstResponder];
+-(BOOL) textViewShouldReturn:(UITextView *) textView {
+    if(textView == self.categoryInput){
+        [textView resignFirstResponder];
     }
     return YES;
     

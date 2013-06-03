@@ -12,6 +12,8 @@
 
 
 @interface iReflectQuoteDetailViewController ()
+//@property (weak, nonatomic) IBOutlet UILabel *favoriteLabel;
+@property (weak, nonatomic) IBOutlet UIButton *starButton;
 
 @end
 
@@ -49,11 +51,24 @@
     
     self.tableView.backgroundView = imageView;
     
+//    self.tableView.backgroundColor = [UIColor blueColor];
+//    self.tableView.backgroundView = nil;
+//    
+
     self.title = self.category;
     self.quoteOut.text = self.quoteObject.quoteEntry;
     self.authorOut.text = self.quoteObject.author;
     
     [self.quoteOut flashScrollIndicators];
+    //highlight favorite button if it is a favorite quote
+    
+    if([self.quoteObject.favorite isEqualToNumber:[NSNumber numberWithInt:1]]){
+        [self.starButton setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
+        self.favoriteLabel.text = @"Favorite";
+    }
+    //add to model
+    
+    
     
     //if date has not passed
     if(self.quoteObject.timeStamp) {
@@ -95,6 +110,44 @@
     self.fetchedResultsController = nil;
 }
 
+- (IBAction)shareButtonAction:(UIBarButtonItem *)sender {
+    
+    NSArray* dataToShare = @[self.quoteObject.quoteEntry, self.quoteObject.author];
+    
+    UIActivityViewController* activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:dataToShare
+                                      applicationActivities:nil];
+    [self presentViewController:activityViewController animated:YES completion:^{}];
+}
+
+- (IBAction)favoriteItem:(UIButton *)sender {
+    UIImage *image = self.starButton.currentImage;
+    Quote *quote = self.quoteObject;
+    
+    
+    if([image isEqual:[UIImage imageNamed:@"star"]])
+    {
+        [sender setImage:[UIImage imageNamed:@"star_gray"] forState:UIControlStateNormal];
+        
+        //take out of model
+        quote.favorite=[NSNumber numberWithInt:0];
+        
+        self.favoriteLabel.text = @"Add to favorites";
+
+    } else {
+        [sender setImage:[UIImage imageNamed:@"star"] forState:UIControlStateNormal];
+        
+        //add to model
+        quote.favorite=[NSNumber numberWithInt:1];
+        self.favoriteLabel.text = @"Favorite";
+  
+    }
+    
+    
+   [self saveData];
+}
+
+
 - (void)configureView
 {
     // Update the user interface for the detail item.
@@ -132,14 +185,8 @@
             [self.categoryObject addQuoteObject:quote];
             
             //save
-            NSError *error;
-            if (![self.managedObjectContext save:&error]) {
-                NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-            }
             
-            
-            [[self tableView] reloadData];
-        
+            [self saveData];
             //update labels
             self.quoteOut.text = quote.quoteEntry;
             self.authorOut.text = quote.author;
@@ -154,6 +201,16 @@
     
      [self dismissViewControllerAnimated:YES completion:NULL];
     }
+}
+
+-(void)saveData {
+    NSError *error;
+    if (![self.managedObjectContext save:&error]) {
+        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+    }
+    
+    
+    [[self tableView] reloadData];
 }
 
 - (IBAction)cancel:(UIStoryboardSegue *)segue
@@ -189,7 +246,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -198,15 +255,34 @@
     return 1;
 }
 
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    
-//    // Configure the cell...
-//    
-//    return cell;
-//}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //static NSString *CellIdentifier = @"Cell";
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+   // [self configureCell:cell atIndexPath:indexPath];
+   
+    return cell;
+}
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if(indexPath.section==2) {
+        [cell.contentView addSubview:self.starButton];    
+//    UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [b setImage:[UIImage imageNamed:@"star_gray"] forState:UIControlStateNormal];
+//        
+//    [b addTarget:self action:@selector(favoriteItem:) forControlEvents:UIControlEventTouchUpInside];
+//        NSLog(@"made button");
+//  //  b.buttonType = UIButtonTypeCustom;
+//    //b.tag = indexPath.row;
+//    [cell addSubview:b];
+    }
+    
+}
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -268,6 +344,8 @@
         sectionContent= self.quoteObject.quoteEntry;
     } else if (indexPath.section==1){
         sectionContent=self.quoteObject.author;
+    } else {
+        sectionContent=@"Star favorite your item";
     }
     return sectionContent;
 }
@@ -280,10 +358,17 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+        
     UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
     backView.backgroundColor = [UIColor clearColor];
     cell.backgroundView = backView;
     
+    
+//    if(indexPath.section==2){
+//        [cell.contentView addSubview:self.starButton];
+//        NSLog(@"content");
+//    }
 }
 
 //- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -17,5 +17,7 @@
 @property (nonatomic, retain) NSDate * timeStamp;
 @property (nonatomic,retain) NSString *author;
 @property (nonatomic, retain) Categories *category;
+@property (nonatomic) NSNumber *favorite;
+
 
 @end

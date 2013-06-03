@@ -14,12 +14,14 @@
 #import "Quote.h"
 #import "Categories.h"
 @interface iReflectMasterViewController ()
+@property (strong, nonatomic) Categories *favoriteCategory;
+@property (strong, nonatomic) IBOutlet UILabel *dailyQuoteLabel;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @end
 
 @implementation iReflectMasterViewController
 @synthesize managedObjectContext;
-@synthesize list= _list;
 
 //@synthesize quoteList=_quoteList;
 @synthesize fetchedResultsController=_fetchedResultsController;
@@ -44,6 +46,13 @@
     
     [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"tableview_bkgnd"]]];
     
+    self.dailyQuoteLabel=[[UILabel alloc]initWithFrame:CGRectMake(130.0, 130.0, 150.0, 20.0)];
+    
+    self.dailyQuoteLabel.font=[UIFont fontWithName:@"Helvetica"  size:15];
+    
+    [self.view addSubview:self.imageView];
+    //[self.view bringSubviewToFront:self.dailyQuoteLabel];
+    [self.imageView addSubview:self.dailyQuoteLabel];
     
     
 //    UIBarButtonItem *buttonItem;
@@ -73,12 +82,119 @@
     
     self.title = @"Categories";
 
-    
+    //check and add favorites
+    //[self addFavorites];
     
  //   UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
   //  self.navigationItem.rightBarButtonItem = addButton;
 }
+-(void)viewWillAppear:(BOOL)animated {
+    
+    [self addFavoriteCategory];
 
+    
+    self.dailyQuoteLabel.text=[self getDailyQuote ];
+
+    [self updateScheduledLabel];
+}
+-(NSArray *) getCurrentQuoteObjects{
+    NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
+    NSMutableArray *allQuoteObjects = [[NSMutableArray alloc] init];
+    
+    for(Categories *cat in fetched) {
+        for(Quote *q in cat.quote) {
+            [allQuoteObjects addObject:q];
+        }
+    }
+    
+    return allQuoteObjects;
+}
+
+-(NSArray *) sortQuotesByTimeStamp:(NSArray *)quotesArray ascending:(BOOL)ascending {
+    
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:ascending] ;
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray;
+    sortedArray = [quotesArray sortedArrayUsingDescriptors:sortDescriptors];
+
+    return sortedArray;
+}
+-(NSString *) getDailyQuote {
+    
+    NSArray *fetchedQuotes = [self getCurrentQuoteObjects] ;
+    
+    NSArray *sortedArray = [self sortQuotesByTimeStamp:fetchedQuotes ascending:YES];
+    
+    for (Quote *findLatest in sortedArray ) {
+        if([self daysBetweenDate:[NSDate date] andDate:findLatest.timeStamp]==0) {
+            NSLog(@"HEre is latest QUOTE : %@",findLatest.quoteEntry);
+
+            return (findLatest.quoteEntry);
+        }
+    }
+    
+    Quote *latestQuote = [sortedArray objectAtIndex:0];
+    NSLog(@"HEre is  QUOTE : %@",latestQuote.quoteEntry);
+    return (latestQuote.quoteEntry);
+    
+}
+
+-(NSInteger *) daysBetweenDate:(NSDate *)firstDate andDate: (NSDate *) secondDate
+{
+    NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSDateComponents* components = [currentCalendar components: NSDayCalendarUnit
+                                                      fromDate: firstDate
+                                                        toDate: secondDate
+                                                       options: 0];
+    
+    NSInteger day = [components day];
+    return day;
+}
+
+-(void) addFavoriteCategory {
+    NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
+    Categories *cateFav;
+    
+    for(Categories *cat in fetched) {
+        if([cat.name isEqual:@"Favorites"]){
+            cateFav=cat;
+            self.favoriteCategory = cat;
+           
+        }
+        
+    }
+    
+    if(!cateFav) {
+        Categories *category = [NSEntityDescription insertNewObjectForEntityForName:@"Categories"
+                                                             inManagedObjectContext:self.managedObjectContext] ;
+        
+        [category setName:@"Favorites"];
+        self.favoriteCategory=category;
+        
+        }
+    
+    
+}
+-(NSArray *)addFavorites{
+    NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
+    NSMutableArray *favQuotes = [[NSMutableArray alloc] init];
+    
+    
+    for(Categories *cat in fetched) {
+        for(Quote *q in cat.quote) {
+                if([q.favorite isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                    [favQuotes addObject:q];
+                }
+            }
+        
+        }
+    
+    
+    
+    return favQuotes;
+
+}
 - (IBAction)cancelReminders:(id)sender{
     
     //are you sure you want to cancel
@@ -151,7 +267,14 @@
   //  }
 }
 - (void)viewDidUnload {
+//        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+//    [context deleteObject:self.favoriteCategory];
+//    [self saveContext];
+//    
     self.fetchedResultsController = nil;
+
+
+
 }
 
 
@@ -206,14 +329,14 @@
     
     
     
-    //SCHEDULE A LOCal NOTIFICATION
+    //SCHEDULE LOCAL NOTIFICATIONS
         if ([[segue identifier] isEqualToString:@"ReturnInput"]) {
             
             //cancel all exisiting notifications
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
             
             Boolean randomTime;
-            
+            BOOL favoriteSelected = NO;
             iReflectScheduleQuotesViewController *addSchedule = [segue sourceViewController];
             
             NSCalendar *theCalendar = [NSCalendar currentCalendar];
@@ -287,10 +410,8 @@
                 }
             } else {
                 
-                
                 for (Categories *ca in fetched) {
                     if([addSchedule.selectedCategoryArray containsObject:ca.name]) {
-                 //       ca.scheduled = [NSNumber numberWithInt:1];
                         for(Quote *q in ca.quote) {
                             [allQuotes addObject:q];
                         }
@@ -300,6 +421,19 @@
                     }
                     
                     
+                }
+                
+                if([addSchedule.selectedCategoryArray containsObject:@"Favorites"]){
+                    
+                    favoriteSelected= YES;
+                //get all the quote objects marked favorite, if it has not already been
+                    //added to allQuotes array then add it.
+                    NSArray *favoriteQuotes = [self addFavorites];
+                    for(Quote *favQ in favoriteQuotes) {
+                        if(![allQuotes containsObject:favQ]) {
+                            [allQuotes addObject:favQ];
+                        }
+                    }
                 }
                 
                 
@@ -368,8 +502,12 @@
                             NSString *s= quote.quoteEntry;
                             [localNot setAlertBody:s];
                             quote.timeStamp=newDay;
+                            if((favoriteSelected) && [quote.favorite isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                                self.favoriteCategory.scheduled=[NSNumber numberWithInt:1];
+                            } else {
                             //mark the category scheduled
-                            quote.category.scheduled=[NSNumber numberWithInt:1];
+                                quote.category.scheduled=[NSNumber numberWithInt:1];
+                            }
                             [quoteTimes insertObject:newDay atIndex:i];
                             //save context
                             NSError *error;
@@ -408,7 +546,14 @@
                             quote.timeStamp=startDate;
                             [quoteTimes insertObject:startDate atIndex:i];
                             //mark category scheduled
-                            quote.category.scheduled=[NSNumber numberWithInt:1];
+                            if((favoriteSelected) && [quote.favorite isEqualToNumber:[NSNumber numberWithInt:1]]) {
+                                self.favoriteCategory.scheduled=[NSNumber numberWithInt:1];
+                            } else {
+                                //mark the category scheduled
+                                quote.category.scheduled=[NSNumber numberWithInt:1];
+                            }
+
+                            
                             //save context
                             NSError *error;
                             if (![self.managedObjectContext save:&error]) {
@@ -699,9 +844,12 @@
     //   cell.textLabel.text = object.quoteEntry;
     
     Categories *cate = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
     cell.textLabel.text = cate.name;
     
     NSLog(@"catescheduld %@ : %@", cate.name, cate.scheduled);
+    
+    
     
     if([cate.scheduled isEqualToNumber:[NSNumber numberWithInt:1]]) {
         
@@ -711,6 +859,51 @@
     }
     
     
+    
+}
+-(NSArray *)getQuotesFromCategory:(Categories *) currentCategory{
+ 
+    NSArray *allQuotes = [self getCurrentQuoteObjects];
+    NSMutableArray *quotesInCate = [[NSMutableArray alloc] init];
+    
+    for(Quote *q in allQuotes) {
+        if([q.category.name isEqual:currentCategory.name]) {
+            [quotesInCate addObject:q];
+        }
+    }
+    
+    return quotesInCate;
+}
+-(void)updateScheduledLabel {
+    //check if quotes in the category are still scheduled, if not, then set scheduled to fals
+    
+   // NSSet *quotes = [[NSSet alloc] initWithSet:currentCategory.quote];
+//    NSArray *quotes = [[NSArray alloc]initWithArray:[currentCategory.quote allObjects]];
+//    
+//    NSArray *sortedArray = [self sortQuotesByTimeStamp:quotes ascending:YES];
+    BOOL foundScheduledQuote = NO;
+    
+    NSArray *fetchedObjects = [self.fetchedResultsController fetchedObjects];
+    //if date has not passed
+    for(Categories *c in fetchedObjects) {
+        for(Quote *q in c.quote) {
+            if(q.timeStamp) {
+            if(!([q.timeStamp timeIntervalSinceNow]<0.0))
+            {
+                foundScheduledQuote=YES;
+            }
+    }
+    }
+    
+        if(!foundScheduledQuote) {
+            c.scheduled = [NSNumber numberWithInt:0];
+        } else {
+            foundScheduledQuote=NO;
+        }
+    }
+
+        
+    return;
     
 }
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -746,7 +939,27 @@
     // The table view should not be re-orderable.
     return NO;
 }
-
+-(NSMutableArray *) createCategoryArray {
+    
+    NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
+    //NSMutableArray *categoryStringArray=[[NSMutableArray alloc]init];
+    
+    NSMutableArray *selectedCategoryStrings = [[NSMutableArray alloc] init];
+    
+    //  [self.selectedCategoryObjects insertObject:@"all" atIndex:0];
+    
+    [selectedCategoryStrings insertObject:@"all" atIndex:0];
+    for (Categories *ca in fetched) {
+        
+        //only schedule category if there are quotes in it
+        if([ca.quote count] || [ca.name isEqual:@"Favorites"]){
+            [selectedCategoryStrings addObject:ca.name];
+            
+        }
+    }
+    return selectedCategoryStrings;
+    
+}
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
@@ -759,7 +972,7 @@
         
        vc.managedObjectContext=[self.fetchedResultsController managedObjectContext];
         vc.cate=object;
-        
+        vc.favoriteQuotes=[self addFavorites];
     }
     
     
@@ -769,27 +982,14 @@
         iReflectScheduleQuotesViewController *schedule=(iReflectScheduleQuotesViewController *) [navController topViewController];
         
 
-         NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
-        //NSMutableArray *categoryStringArray=[[NSMutableArray alloc]init];
+         
+        self.selectedCategoryObjects=[self createCategoryArray];
         
-        self.selectedCategoryStrings = [[NSMutableArray alloc] init];
-
-      //  [self.selectedCategoryObjects insertObject:@"all" atIndex:0];
-        
-        [self.selectedCategoryStrings addObject:@"all"];
-        for (Categories *ca in fetched) {
-            
-            //only schedule category if there are quotes in it
-            if([ca.quote count]){
-            [self.selectedCategoryStrings addObject:ca.name];
-        
-            }
-        }
         //schedule.categoryArray=[NSArray arrayWithArray:categoryStringArray];
         schedule.categoryArray = [[NSMutableArray alloc] init];
         schedule.selectedCategoryArray=[[NSMutableArray alloc] initWithObjects:@"all", nil];
 
-        schedule.categoryArray = self.selectedCategoryStrings;
+        schedule.categoryArray = self.selectedCategoryObjects;
         
 
     }

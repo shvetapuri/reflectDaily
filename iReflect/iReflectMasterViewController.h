@@ -20,7 +20,6 @@
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) NSMutableArray *list;
 
 @property (strong,nonatomic) NSMutableArray *selectedCategoryObjects;
 @property (strong,nonatomic) NSMutableArray *selectedCategoryStrings;

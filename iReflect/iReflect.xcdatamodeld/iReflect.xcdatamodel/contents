@@ -7,6 +7,7 @@
     </entity>
     <entity name="Quote" representedClassName="Quote">
         <attribute name="author" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favorite" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="quoteEntry" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timeStamp" optional="YES" attributeType="Date">
             <userInfo/>
@@ -16,6 +17,6 @@
     </entity>
     <elements>
         <element name="Categories" positionX="3240" positionY="-1035" width="128" height="90"/>
-        <element name="Quote" positionX="3445" positionY="-1035" width="128" height="105"/>
+        <element name="Quote" positionX="3445" positionY="-1035" width="128" height="120"/>
     </elements>
 </model>
