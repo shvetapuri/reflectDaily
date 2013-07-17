@@ -15,7 +15,8 @@
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSSet *quote;
-@property (nonatomic) NSNumber *scheduled;
+@property (nonatomic,retain) NSString *scheduleType;
+
 @end
 
 @interface Categories (CoreDataGeneratedAccessors)

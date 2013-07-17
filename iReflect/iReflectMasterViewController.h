@@ -25,6 +25,8 @@
 @property (strong,nonatomic) NSMutableArray *selectedCategoryStrings;
 
 //@property (nonatomic, strong) NSArray *quoteList;
+@property (nonatomic) BOOL newQuotesScheduled;
+
 
 - (IBAction)done:(UIStoryboardSegue *)segue;
 - (IBAction)cancel:(UIStoryboardSegue *)segue;

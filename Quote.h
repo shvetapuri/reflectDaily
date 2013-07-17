@@ -18,6 +18,9 @@
 @property (nonatomic,retain) NSString *author;
 @property (nonatomic, retain) Categories *category;
 @property (nonatomic) NSNumber *favorite;
+@property (nonatomic,retain) NSNumber *scheduleStart;
+@property (nonatomic,retain) NSNumber *scheduleEnd;
+
 
 
 @end

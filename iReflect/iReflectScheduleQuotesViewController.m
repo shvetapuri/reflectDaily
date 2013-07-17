@@ -58,13 +58,27 @@
     
     [self.startTimePicker selectRow:11 inComponent:0 animated:YES];
      [self.startTimePicker selectRow:1 inComponent:1 animated:YES];
-     [self.endTimePicker selectRow:7 inComponent:0 animated:YES];
+     [self.endTimePicker selectRow:5 inComponent:0 animated:YES];
      [self.endTimePicker selectRow:1 inComponent:1 animated:YES];
+    
+
+    
+    //set default  values
+    
+    self.startampm=@"PM";
+    self.startTime=[NSNumber numberWithInteger:12];
+    
+    self.endampm=@"PM";
+    self.endTime=[NSNumber numberWithInteger:6];
+    
     
     self.startTimePicker.tag=100;
     self.endTimePicker.tag=200;
     
+    self.datePicker.tag=300;
     
+    self.endTimeArray = [self getEndTimeArrays];
+
     
   //  self.pickerView.transform = CGAffineTransformMakeScale(.9,.9);
     
@@ -139,7 +153,7 @@
         [self.startTimePicker setHidden:NO];
         [self.endTimePicker setHidden:NO];
         
-        self.instructionsLabel.text=@"Select time window for random daily quote";
+        self.instructionsLabel.text=@"Select 24 hour time window for random daily quote";
       //  [self.startTimePickerLabel setHidden:NO];
     }
  
@@ -176,13 +190,28 @@
 //PickerViewController.m
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView {
 
+    if(thePickerView.tag==300) {
+        return 1;
+       
+    } else {
      return 2;
+    }
     
 }
 
 //PickerViewController.m
 - (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component {
-
+    //if end time picker
+    if (thePickerView.tag==200) {
+        
+        if (component==0){
+            return [[self.endTimeArray objectAtIndex:0] count];
+            
+        } else {
+            return [[self.endTimeArray objectAtIndex:1] count];
+        }
+    }
+    
         if (component==0){
             return 12;
             
@@ -196,27 +225,130 @@
 //PickerViewController.m
 - (NSString *)pickerView:(UIPickerView *)thePickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     
-     
+        //if end time
+        if (thePickerView.tag==200) {
+            
+          self.endTimeArray= [self getEndTimeArrays];
+            
+                if (component==0) {
+                    
+                    return [[[self.endTimeArray objectAtIndex:0] objectAtIndex:row] stringValue];
+
+                }
+                else {
+                    return [[self.endTimeArray objectAtIndex:1] objectAtIndex:row];
+                }
+            
+            
+
+
+            }
     
-        
-//        if (component == 0)
-//        {
-//            return @"Category";
-//        } else {
-//            return [self.categoryArray objectAtIndex:row];
-//        }
-        
-    
-        if (component==0){
+        else if (component==0){
             return [[self.arrayNumbers objectAtIndex:row] stringValue];
         }
         else {
-            return [self.ampm objectAtIndex:row] ;
+            
+            return [self.ampm objectAtIndex:row];
+            
+            
+        }
+}
+
+-(NSArray *) getEndTimeArrays {
+    
+    
+    //find out 24 hour start time
+    int startTime24hr = [self convertTo24hr:self.startTime ampm:self.startampm];
+    
+    NSLog(@"in getendtimearrays %d",startTime24hr);
+
+    
+    NSMutableArray *endTimeArray=[[NSMutableArray alloc] init] ;
+    NSMutableArray *endAMPM=[[NSMutableArray alloc] init];
+    
+    for(int i=(startTime24hr+1);i<=24;i++) {
+        //convert 24hr end time array to 12hr
+        
+        NSDictionary *convertedTime = [[NSDictionary alloc] initWithDictionary:[self convertTo12hr:i]];
+        
+        [endTimeArray addObject:[convertedTime objectForKey:@"time"]];
+        [endAMPM addObject:[convertedTime objectForKey:@"ampm"]];
+        
+        NSLog(@"time: %@  ampm: %@", [convertedTime objectForKey:@"time"], [convertedTime objectForKey:@"ampm"] );
+    }
+    //save last row
+//    NSString *lastAmpm = [endAMPM lastObject];
+//    int lastAmpmIndex;
+//
+    
+    
+    
+    NSMutableArray *endAMPMArray=[[NSMutableArray alloc] init];
+
+    
+    if([endAMPM containsObject:@"AM"]) {
+        [endAMPMArray addObject:@"AM"];
+    }
+    if([endAMPM containsObject:@"PM"]) {
+        [endAMPMArray addObject:@"PM"];
+    }
+    
+    if(startTime24hr==24) {
+        endTimeArray= [self.arrayNumbers copy];
+        endAMPMArray = [self.ampm copy];
+    }
+       
+
+return @[endTimeArray, endAMPMArray];
+    
+    
+}
+
+-(NSDictionary *)convertTo12hr:(int)timeToConvert {
+    
+    NSMutableDictionary *convertedTime=[[NSMutableDictionary alloc] init];
+    
+    if(timeToConvert <12) {
+        [convertedTime setValue:[NSNumber numberWithInt:timeToConvert] forKey:@"time" ];
+        [convertedTime setValue:@"AM" forKey:@"ampm"];
+    } else if(timeToConvert==12) {
+        [convertedTime setValue:[NSNumber numberWithInt:timeToConvert] forKey:@"time" ];
+        [convertedTime setValue:@"PM" forKey:@"ampm"];
+    } else if((timeToConvert-12)==12) {
+        [convertedTime setValue:[NSNumber numberWithInt:(timeToConvert-12)] forKey:@"time" ];
+        [convertedTime setValue:@"AM" forKey:@"ampm"];
+    } else {
+        [convertedTime setValue:[NSNumber numberWithInt:(timeToConvert-12)] forKey:@"time"];
+        [convertedTime setValue:@"PM" forKey:@"ampm"];
+    }
+return convertedTime;
+}
+
+-(int)convertTo24hr:(NSNumber *)time ampm:(NSString *)ampm {
+    
+    int time24hr;
+    
+    if([ampm isEqualToString:@"PM"]){
+        if([time intValue] == 12){
+            
+            time24hr=[time intValue];
+            
+        } else {
+            time24hr=[time intValue] + 12 ;
         }
         
+    } else {
+        if([time intValue] == 12){
+            time24hr=[time intValue] + 12 ;
+        } else {
+            time24hr=[time intValue];
+        }
+        
+    }
     
-   
-     
+    
+    return time24hr;
 }
 
 //PickerViewController.m
@@ -225,27 +357,62 @@
    // NSLog(@"Selected Color: %@. Index of selected color: %i",
     
    // [thePickerView isEqual:self.startTimePicker]
-    
+
     
     if(thePickerView.tag==100) {
+        
+
         if (component==0){
             self.startTime=[self.arrayNumbers objectAtIndex:row];
+             NSLog(@"in start picker %@",self.startTime);
         } else {
             self.startampm=[self.ampm objectAtIndex:row];
+             NSLog(@"in am pm %@",self.startampm);
         }
+        
+        self.endTimeArray= [self getEndTimeArrays];
+        [self.endTimePicker reloadAllComponents];
+
+        
      }
     if (thePickerView.tag==200) {
          if (component==0) {
-             self.endTime=[self.arrayNumbers objectAtIndex:row];
+             self.endTime=[[self.endTimeArray objectAtIndex:0] objectAtIndex:row];
+            
          } else {
-             self.endampm=[self.ampm objectAtIndex:row];
+             self.endampm=[[self.endTimeArray objectAtIndex:1] objectAtIndex:row];
          }
          
      }
     
+    if(thePickerView.tag != 300) {
+    //check that start time is less than end time otherwise set the font of the end time to red
+    if([self compareEndStartTimes] ==0) {
+        //end time is before start time
+        self.instructionsLabel.textColor=[UIColor redColor];
+        self.instructionsLabel.text=@"Start time must be before the end time";
+
+    } else {
+        self.instructionsLabel.textColor=[UIColor darkGrayColor];
+        self.instructionsLabel.text=@"Select 24 hour time window for random daily quote";
+
+    }
+    }
+    
 }
 
-
+-(BOOL)compareEndStartTimes {
+ 
+    int startTime24hr = [self convertTo24hr:self.startTime ampm:self.startampm];
+    int endTime24hr = [self convertTo24hr:self.endTime ampm:self.endampm];
+    
+    if(endTime24hr<=startTime24hr) {
+        return 0;
+    } else {
+        return 1;
+    }
+    
+}
 
 
 - (void)didReceiveMemoryWarning

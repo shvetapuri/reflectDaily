@@ -96,7 +96,7 @@
             [self.cate addQuoteObject:quote];
 
             //if quote's category is scheduled, then schedule quote too
-            if([self.cate.scheduled isEqualToNumber:[NSNumber numberWithInt:1]]) {
+            if(![self.cate.scheduleType isEqualToString:@"none"]) {
                 //find out the latest time scheduled and schedule new quote at end
                 NSArray *fetchedQuotes = [self.fetchedResultsController fetchedObjects];
                 
@@ -190,7 +190,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(![self.cate.name isEqualToString:@"Favorites"]) {
+    if(![self.cate.name isEqualToString:@"0AFavorites"]) {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
     } else {
@@ -226,7 +226,7 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     NSLog(@"favorites %@",self.cate.name);
-    if(![self.cate.name isEqualToString:@"Favorites"]) {
+    if(![self.cate.name isEqualToString:@"0AFavorites"]) {
         [self configureCell:cell atIndexPath:indexPath];
     } else {
         [self configureFavoritesCell:cell atIndexPath:indexPath];
@@ -282,7 +282,7 @@
     if ([[segue identifier] isEqualToString:@"quoteDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Quote *object;
-        if(![self.cate.name isEqualToString:@"Favorites"]) {
+        if(![self.cate.name isEqualToString:@"0AFavorites"]) {
             object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         } else {
             object = [self.favoriteQuotes objectAtIndex:indexPath.row];

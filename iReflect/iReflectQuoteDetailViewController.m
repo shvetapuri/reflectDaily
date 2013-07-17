@@ -56,10 +56,13 @@
 //    
 
     self.title = self.category;
-    self.quoteOut.text = self.quoteObject.quoteEntry;
-    self.authorOut.text = self.quoteObject.author;
     
-    [self.quoteOut flashScrollIndicators];
+
+//    self.authorOut.text = self.quoteObject.author;
+    
+
+    
+ //   [self.quoteOut flashScrollIndicators];
     //highlight favorite button if it is a favorite quote
     
     if([self.quoteObject.favorite isEqualToNumber:[NSNumber numberWithInt:1]]){
@@ -148,24 +151,24 @@
 }
 
 
-- (void)configureView
-{
-    // Update the user interface for the detail item.
-   // BirdSighting *theSighting = self.sighting;
-    
-    static NSDateFormatter *formatter = nil;
-    if (formatter == nil) {
-        formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateStyle:NSDateFormatterMediumStyle];
-    }
-    if (self.quoteObject) {
-        self.quoteOut.text = self.quoteObject.quoteEntry;
-        self.authorOut.text = self.quoteObject.author;
-        
-       // self.categoryOut.text = self.quoteObject.categor;
-       
-    }
-}
+//- (void)configureView
+//{
+//    // Update the user interface for the detail item.
+//   // BirdSighting *theSighting = self.sighting;
+//    
+//    static NSDateFormatter *formatter = nil;
+//    if (formatter == nil) {
+//        formatter = [[NSDateFormatter alloc] init];
+//        [formatter setDateStyle:NSDateFormatterMediumStyle];
+//    }
+//    if (self.quoteObject) {
+//        self.quoteOut.text = self.quoteObject.quoteEntry;
+//        self.authorOut.text = self.quoteObject.author;
+//        
+//       // self.categoryOut.text = self.quoteObject.categor;
+//       
+//    }
+//}
 
 - (IBAction)done:(UIStoryboardSegue *)segue
 {
@@ -188,10 +191,10 @@
             
             [self saveData];
             //update labels
-            self.quoteOut.text = quote.quoteEntry;
-            self.authorOut.text = quote.author;
-            
-            [self.quoteOut flashScrollIndicators];
+//            self.quoteOut.text = quote.quoteEntry;
+//            self.authorOut.text = quote.author;
+//            
+//            [self.quoteOut flashScrollIndicators];
 
         
         } else {
@@ -260,28 +263,23 @@
     //static NSString *CellIdentifier = @"Cell";
     //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    if(cell.tag==1)  {
+        cell.textLabel.numberOfLines=0;
+        cell.textLabel.font=[self fontForCell];
+       cell.textLabel.text = self.quoteObject.quoteEntry;
     
-   // [self configureCell:cell atIndexPath:indexPath];
+    } else if(cell.tag==2) {
+        cell.textLabel.numberOfLines=0;
+        cell.textLabel.font=[self fontForCell];
+        cell.textLabel.text = self.quoteObject.author;
+
+    }
+    
    
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    
-    if(indexPath.section==2) {
-        [cell.contentView addSubview:self.starButton];    
-//    UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [b setImage:[UIImage imageNamed:@"star_gray"] forState:UIControlStateNormal];
-//        
-//    [b addTarget:self action:@selector(favoriteItem:) forControlEvents:UIControlEventTouchUpInside];
-//        NSLog(@"made button");
-//  //  b.buttonType = UIButtonTypeCustom;
-//    //b.tag = indexPath.row;
-//    [cell addSubview:b];
-    }
-    
-}
+
 
 
 /*
@@ -328,18 +326,30 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *text = [self getTextForIndexPath:indexPath];
-    UIFont *font = [UIFont systemFontOfSize:14];
+    UIFont *font = [self fontForCell];
     CGSize size = [self getSizeOfText:text withFont:font];
+    
+    //set height for textview too
+//    CGRect frame = self.quoteOut.frame;
+//    frame.size=size;
+//    self.quoteOut.frame = frame;
     
     return (size.height); // I put some padding on it.
 }
+
+- (UIFont *)fontForCell
+{
+    return [UIFont systemFontOfSize:14];
+}
+//- See more at: http://timbroder.com/2012/09/ios-multiple-lines-of-text-in-a-uitableviewcell.html#sthash.7INNdhP5.dpuf
+
 //Then you write a method pull the text for this cell...
 
 - (NSString *)getTextForIndexPath:(NSIndexPath *)indexPath
 {
     //NSString *sectionHeader = [self.tableSections objectAtIndex:[indexPath section]];
     NSString *sectionContent;
-    NSLog(@"indexpathsection %d", indexPath.section);
+   // NSLog(@"indexpathsection %d", indexPath.section);
     if(indexPath.section==0) {
         sectionContent= self.quoteObject.quoteEntry;
     } else if (indexPath.section==1){
@@ -353,7 +363,7 @@
 
 - (CGSize)getSizeOfText:(NSString *)text withFont:(UIFont *)font
 {
-    return [text sizeWithFont:font constrainedToSize:CGSizeMake(280, 500)];
+    return [text sizeWithFont:font constrainedToSize:CGSizeMake(280.0f, MAXFLOAT) ];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -415,7 +425,7 @@
     //filter based on category
    
     Categories *categoryName = self.categoryObject;
-    NSLog(@"category11 = %@", categoryName.name);
+   // NSLog(@"category11 = %@", categoryName.name);
 
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"category = %@", categoryName];
     //    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"category = Wisdom"];

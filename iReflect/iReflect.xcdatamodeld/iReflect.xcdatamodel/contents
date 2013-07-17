@@ -2,13 +2,15 @@
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="11G63" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Categories" representedClassName="Categories" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="scheduled" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="scheduleType" attributeType="String" defaultValueString="none" syncable="YES"/>
         <relationship name="quote" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Quote" inverseName="category" inverseEntity="Quote" syncable="YES"/>
     </entity>
     <entity name="Quote" representedClassName="Quote">
         <attribute name="author" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="favorite" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="quoteEntry" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="scheduleEnd" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="scheduleStart" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="timeStamp" optional="YES" attributeType="Date">
             <userInfo/>
         </attribute>
@@ -16,7 +18,7 @@
         <userInfo/>
     </entity>
     <elements>
-        <element name="Categories" positionX="3240" positionY="-1035" width="128" height="90"/>
-        <element name="Quote" positionX="3445" positionY="-1035" width="128" height="120"/>
+        <element name="Categories" positionX="3222" positionY="-1035" width="128" height="90"/>
+        <element name="Quote" positionX="3445" positionY="-1035" width="128" height="150"/>
     </elements>
 </model>

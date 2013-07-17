@@ -17,5 +17,8 @@
 @dynamic category;
 @dynamic author;
 @dynamic favorite;
+@dynamic scheduleEnd;
+@dynamic scheduleStart;
+
 
 @end

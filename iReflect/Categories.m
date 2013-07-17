@@ -14,6 +14,5 @@
 
 @dynamic name;
 @dynamic quote;
-@dynamic scheduled;
-
+@dynamic scheduleType;
 @end

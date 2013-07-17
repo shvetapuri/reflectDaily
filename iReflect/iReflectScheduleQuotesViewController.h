@@ -24,6 +24,7 @@
 
 @property (strong,nonatomic) NSArray *arrayNumbers;
 @property (strong,nonatomic) NSArray *ampm;
+@property (strong,nonatomic) NSArray *endTimeArray;
 
 @property(nonatomic) NSNumber *startTime;
 @property(nonatomic) NSNumber *endTime;
@@ -43,4 +44,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *instructionsLabel;
 
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
+
+-(int)convertTo24hr:(NSNumber *)time ampm:(NSString *)ampm;
+-(BOOL)compareEndStartTimes;
+
 @end

@@ -32,9 +32,9 @@
 //    [[UINavigationBar appearance] setBackgroundImage:gradientImage32
 //                                       forBarMetrics:UIBarMetricsLandscapePhone];
     
-   // [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
-     
-    
+    [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
+     [[UIToolbar appearance] setTintColor:[UIColor brownColor]];
+   
 //    // Customize the title text for *all* UINavigationBars
 //    [[UINavigationBar appearance] setTitleTextAttributes:
 //     [NSDictionary dictionaryWithObjectsAndKeys:
@@ -96,6 +96,8 @@
     navigationController.toolbarHidden=NO;
     
     controller.managedObjectContext = self.managedObjectContext;
+    if(self.newQuotesScheduled==1)
+    {   controller.newQuotesScheduled=1; }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (![defaults objectForKey:@"firstRun"])
@@ -188,7 +190,7 @@
         NSArray *quotes = [dict objectForKey:@"quoteEntry"];
         
         
-        for(int i=0; i<=(([quotes count]/2)+1);i=i+2) {
+        for(int i=0; i<(([quotes count]/2)+1);i=i+2) {
             
             Quote *q = [NSEntityDescription insertNewObjectForEntityForName:@"Quote" inManagedObjectContext:ctx];
             NSLog(@"here is i : %d",i);
@@ -211,7 +213,16 @@
 
 - (void)application:(UIApplication *)application
 didReceiveLocalNotification:(UILocalNotification *)notification {
+    self.newQuotesScheduled = 0;
+    
+    NSLog(@"in didreceive local notif");
+    
+    int n = [[[UIApplication sharedApplication] scheduledLocalNotifications] count];
+    int x = 64 - n;
 
+    
+    [self scheduleQuotes:x];
+    
 //    UIApplicationState applicationState = application.applicationState;
 //    if (applicationState == UIApplicationStateActive) {
 //        [application presentLocalNotificationNow:notification];
@@ -220,10 +231,162 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
    // [self scheduleQuotes];
 }
 
--(void)scheduleQuotes
+-(NSArray *)getDataFromModel:(NSString *)dataType {
+    NSFetchRequest *fetchRequest1 = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity1 ;
+    if([dataType isEqualToString:@"Categories"]) {
+        entity1= [NSEntityDescription
+                                       entityForName:@"Categories" inManagedObjectContext:self.managedObjectContext];
+    } else {
+        entity1 = [NSEntityDescription
+                                        entityForName:@"Quote" inManagedObjectContext:self.managedObjectContext];
+    }
+        [fetchRequest1 setEntity:entity1];
+    NSError *error;
+    
+        NSArray *fetchedObjects1 = [self.managedObjectContext executeFetchRequest:fetchRequest1 error:&error];
+        
+    return fetchedObjects1;
+}
+-(void)scheduleQuotes:(int)x
 {
+    //find scheduled categories and scheduled up to x reflections
+    //schedule quotes for only scheduled categories
+    
+    NSArray *data=[self getDataFromModel:@"Categories"];
+    int count = 0;
+    
+            for(Categories *c in data) {
+                if(![c.scheduleType isEqualToString:@"none"]){
+
+                    for(Quote *q in c.quote) {
+                            if(!(q.timeStamp) || ([q.timeStamp timeIntervalSinceNow]<0.0) )
+                            {
+                                //if timeinterval has passed or doesn't exist,schedule
+                                //quote
+                                if(count < x) {
+                                    
+                                    [self scheduleLocalNotif:c.scheduleType quoteObject:q count:count];
+                                    count++;
+                                } 
+                                
+                            
+                        }
+                }
+                
+                }
+            }
+    
+    if(count>0){
+        self.newQuotesScheduled = 1;
+        NSLog(@"marked it true");
+    }
+    
+       
     
 }
+
+-(void)scheduleLocalNotif:(NSString *)timeType quoteObject:(Quote*)quoteObject count:(int)count {
+    
+    NSCalendar *theCalendar = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc]init ];
+    
+    
+    //find last quote scheduled
+    NSDate *latestQuote=[self findDateOfLatestQuote];
+    
+    if(!(latestQuote)) {
+        //if couldn't find latest quote then use today's date
+        latestQuote=[NSDate date];
+    }
+    dateComponents=[theCalendar components:(NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:latestQuote];
+
+    
+    //Find random Time
+    
+    if([timeType isEqualToString:@"randomTime"]) {
+
+        [dateComponents setHour: [self calcRandomTime:@"hour" quoteObject:quoteObject]];
+        [dateComponents setMinute: [self calcRandomTime:@"minute" quoteObject:quoteObject]];
+        
+    }
+    
+    //add a day to the last scheduled quote
+    [dateComponents setDay: ([dateComponents day] +1) ];
+    
+    
+    NSDate *newDay = [theCalendar dateFromComponents:dateComponents];
+    
+    UILocalNotification *localNot= [[UILocalNotification alloc] init];
+    [localNot setTimeZone:[NSTimeZone defaultTimeZone]];
+    //localNot.applicationIconBadgeNumber=1;
+    localNot.repeatInterval = 0;
+    [localNot setAlertAction:@"Schedule!"];    
+    localNot.soundName=UILocalNotificationDefaultSoundName;    
+     localNot.fireDate=newDay;
+    [localNot setAlertBody:quoteObject.quoteEntry];
+    
+    NSLog(@"scheduling quote %@",quoteObject.quoteEntry);
+
+    //set variables core data
+    quoteObject.timeStamp=newDay;
+    
+    
+     [[UIApplication sharedApplication] scheduleLocalNotification:localNot];
+    
+    [self saveContext];
+    
+}
+
+-(NSDate *) findDateOfLatestQuote {
+    //find out the latest time scheduled or return today's date if none is found
+    NSArray *fetchedQuotes = [self getDataFromModel:@"Quotes"];
+    
+    
+    //sort so that the latest date is first
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:NO] ;
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray;
+    sortedArray = [fetchedQuotes sortedArrayUsingDescriptors:sortDescriptors];
+    
+
+    for(Quote *q in sortedArray) {
+       
+
+        if([q.timeStamp timeIntervalSinceNow]>0.0){
+
+             NSLog(@"latest quote : %@",q.quoteEntry);
+            return q.timeStamp;
+        } }
+    
+    return 0;
+
+}
+-(int )calcRandomTime:(NSString *)type quoteObject:(Quote *) quoteObject {
+    
+    int randHrMin;
+    int start;
+    int end;
+
+    if([type isEqualToString:@"hour" ]) {
+        
+        if(quoteObject.scheduleStart) {
+            start = [quoteObject.scheduleStart intValue];
+            end =[quoteObject.scheduleEnd intValue];
+        } else {
+            start = 12;
+            end = 18;
+        }
+        randHrMin  = (arc4random() % (end-start)) + start; 
+    } else {
+        randHrMin = (arc4random() % 59);
+    }
+    
+    return randHrMin;
+   }
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -253,6 +416,7 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
     
     [self saveContext];
 }
+
 
 - (void)saveContext
 {

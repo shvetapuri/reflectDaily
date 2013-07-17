@@ -10,6 +10,7 @@
 #import "iReflectAddCategoryViewController.h"
 #import "iReflectDetailViewController.h"
 #import "iReflectScheduleQuotesViewController.h"
+#import "iReflectAppDelegate.h"
 
 #import "Quote.h"
 #import "Categories.h"
@@ -18,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *dailyQuoteLabel;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+
+@property (strong, nonatomic) iReflectAppDelegate *appDelegate;
 @end
 
 @implementation iReflectMasterViewController
@@ -35,20 +38,30 @@
 {
     [super viewDidLoad];
     
+    self.appDelegate = (iReflectAppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    if(self.newQuotesScheduled ==1) {
+        NSLog(@"detected true");
+
+        [self showNewQuotesScheduledAlert];
+    }
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
   
-//    
-//    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableview_bkgnd.png"]];
-//    
-//    self.tableView.backgroundView = imageView;
     
-    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"tableview_bkgnd"]]];
+   
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableview_bkgnd.png"]];
+    self.tableView.backgroundView = imageView;
+   
     
-    self.dailyQuoteLabel=[[UILabel alloc]initWithFrame:CGRectMake(130.0, 130.0, 150.0, 20.0)];
+  //  [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"iReflect_tableBackgnd.png"]]];
     
-    self.dailyQuoteLabel.font=[UIFont fontWithName:@"Helvetica"  size:15];
+    //daily quote label
+    self.dailyQuoteLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 160)];
+    self.dailyQuoteLabel.font=[UIFont fontWithName:@"Georgia"  size:13];
+    self.dailyQuoteLabel.backgroundColor =[UIColor clearColor];
+    self.dailyQuoteLabel.numberOfLines = 0;
+    self.dailyQuoteLabel.textAlignment = NSTextAlignmentCenter;
     
     [self.view addSubview:self.imageView];
     //[self.view bringSubviewToFront:self.dailyQuoteLabel];
@@ -80,7 +93,7 @@
 	}
  
     
-    self.title = @"Categories";
+    self.title = @"iReflect";
 
     //check and add favorites
     //[self addFavorites];
@@ -88,10 +101,21 @@
  //   UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
   //  self.navigationItem.rightBarButtonItem = addButton;
 }
+-(void) showNewQuotesScheduledAlert {
+    
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Alert"
+                          message: @"New reflections have been added to the schedule"
+                          delegate: nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    [alert show];
+    
+}
 -(void)viewWillAppear:(BOOL)animated {
     
     [self addFavoriteCategory];
-
+ 
     
     self.dailyQuoteLabel.text=[self getDailyQuote ];
 
@@ -127,10 +151,12 @@
     NSArray *sortedArray = [self sortQuotesByTimeStamp:fetchedQuotes ascending:YES];
     
     for (Quote *findLatest in sortedArray ) {
+        if(findLatest.timeStamp) {
         if([self daysBetweenDate:[NSDate date] andDate:findLatest.timeStamp]==0) {
             NSLog(@"HEre is latest QUOTE : %@",findLatest.quoteEntry);
 
             return (findLatest.quoteEntry);
+        }
         }
     }
     
@@ -157,7 +183,7 @@
     Categories *cateFav;
     
     for(Categories *cat in fetched) {
-        if([cat.name isEqual:@"Favorites"]){
+        if([cat.name isEqual:@"0AFavorites"]){//favorite category
             cateFav=cat;
             self.favoriteCategory = cat;
            
@@ -166,11 +192,15 @@
     }
     
     if(!cateFav) {
-        Categories *category = [NSEntityDescription insertNewObjectForEntityForName:@"Categories"
-                                                             inManagedObjectContext:self.managedObjectContext] ;
         
-        [category setName:@"Favorites"];
+         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+        Categories *category = [NSEntityDescription insertNewObjectForEntityForName:@"Categories"
+                                                             inManagedObjectContext:context] ;
+        //favorites called 0favorites to enable correct sorting order
+        [category setName:@"0AFavorites"];
         self.favoriteCategory=category;
+        
+        [self saveContext];
         
         }
     
@@ -215,7 +245,7 @@
         //delete timestamp in quote object
         NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
         for (Categories *ca in fetched) {
-            ca.scheduled = [NSNumber numberWithInt:0];
+            ca.scheduleType = @"none";
             for(Quote *q in ca.quote) {
                 
                 q.timeStamp = nil;
@@ -300,7 +330,6 @@
                                                          inManagedObjectContext:context] ;
             
             [category setName:addController.categoryInput.text];
-        //    [category addQuoteObject:nil];
         
             
             
@@ -310,7 +339,24 @@
                 NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
             }
             
+            
+            //sort alphabetically
+            NSArray *fetchedCategories = [self.fetchedResultsController fetchedObjects] ;
+            NSSortDescriptor *sortDescriptor;
+            sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] ;
+            NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            NSArray *sortedArray;
+            sortedArray = [fetchedCategories sortedArrayUsingDescriptors:sortDescriptors];
+            
+            //save
+            if (![context save:&error]) {
+                NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+            }
+            
+            
             [[self tableView] reloadData];
+            
+            
         } else {
             //don't save duplicate category
             if([categoryNames containsObject:addController.categoryInput.text]) {
@@ -332,8 +378,7 @@
     //SCHEDULE LOCAL NOTIFICATIONS
         if ([[segue identifier] isEqualToString:@"ReturnInput"]) {
             
-            //cancel all exisiting notifications
-            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            
             
             Boolean randomTime;
             BOOL favoriteSelected = NO;
@@ -349,8 +394,8 @@
             NSMutableArray *quoteTimes=[[NSMutableArray alloc] init];
             //segment button random time or scheduled
             NSInteger index = [addSchedule.intervalPicker selectedSegmentIndex];
-            int *startTimeLocal;
-            int *endTimeLocal;
+            int startTimeLocal;
+            int endTimeLocal;
            
             switch (index) {
                     
@@ -362,15 +407,24 @@
                 }
                 case 1:
                 {
-                    
                     randomTime = YES;
-                    //convert the 12 hour to 24 hour
-                    if([addSchedule.startampm isEqualToString:@"pm"]){
-                        startTimeLocal=[addSchedule.startTime integerValue] + 12 ;
-                    }
-                    if([addSchedule.endampm isEqualToString:@"pm"]){
-                        endTimeLocal=[addSchedule.endTime integerValue] + 12 ;
-                    }
+                    
+                    startTimeLocal= [addSchedule convertTo24hr:addSchedule.startTime ampm:addSchedule.startampm];
+                    endTimeLocal = [addSchedule convertTo24hr:addSchedule.endTime ampm:addSchedule.endampm];
+                    
+                    NSLog(@"starttimelocal : %d  startTimeSelected %@  , endTimelocal : %d  endTimeselected %@",startTimeLocal, addSchedule.startTime, endTimeLocal, addSchedule.endTime );
+
+                    if(endTimeLocal<=startTimeLocal) {
+                        UIAlertView *alert = [[UIAlertView alloc]
+                                              initWithTitle:@"Attention: Action Canceled!"
+                                              message: @"Start time must be before end time in random timer window. Please select correct times and reschedule"
+                                              delegate: nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+                        [alert show];
+                        
+                        return;
+                    }                    
                     
                     break;
                 }
@@ -383,8 +437,9 @@
                 }
             }
             
-            //NSDate* newDate = [calendar dateByAddingComponents: oneDay toDate: self.date options: 0];
-                
+            //cancel all exisiting notifications
+            
+            [[UIApplication sharedApplication] cancelAllLocalNotifications];
                 
             NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
            
@@ -393,17 +448,16 @@
       //      NSMutableArray *quoteDictArray = [[NSMutableArray alloc] init];
             
            // if([addSchedule.selectedCategoryArray count]){
-            for(int f=0;f<[addSchedule.selectedCategoryArray count];f++)
-            {
-                NSLog(@"YES, %@",[addSchedule.selectedCategoryArray objectAtIndex:f]);
-            }
+//            for(int f=0;f<[addSchedule.selectedCategoryArray count];f++)
+//            {
+//                NSLog(@"YES, %@",[addSchedule.selectedCategoryArray objectAtIndex:f]);
+//            }
             //}
     
         
             if([addSchedule.selectedCategoryArray containsObject:@"all"]) {
                 
                 for (Categories *ca in fetched) {
-                  //  ca.scheduled = [NSNumber numberWithInt:1];
                         for(Quote *q in ca.quote) {
                             [allQuotes addObject:q];
                         }
@@ -415,15 +469,12 @@
                         for(Quote *q in ca.quote) {
                             [allQuotes addObject:q];
                         }
-                    } else {
-                 //       ca.scheduled = [NSNumber numberWithInt:0];
-                        
                     }
                     
                     
                 }
                 
-                if([addSchedule.selectedCategoryArray containsObject:@"Favorites"]){
+                if([addSchedule.selectedCategoryArray containsObject:@"0AFavorites"]){
                     
                     favoriteSelected= YES;
                 //get all the quote objects marked favorite, if it has not already been
@@ -442,7 +493,7 @@
             //mark the all categories not scheduled and erase timestamp
             
             for (Categories *ca in fetched) {
-                ca.scheduled=[NSNumber numberWithInt:0];
+                ca.scheduleType=@"none";
                 for(Quote *q in ca.quote) {
                     q.timeStamp = nil;
                 }
@@ -451,8 +502,8 @@
 
             
             NSDateComponents *dayComponent = [[NSDateComponents alloc] init] ;
-                dayComponent.day = 1;
-            //dayComponent.minute = 1;
+               dayComponent.day = 1; 
+           //dayComponent.minute = 1;
             int totalCount = [allQuotes count];
             int maxLocalNotifs = 64;
             if(totalCount>maxLocalNotifs) {
@@ -467,7 +518,8 @@
                     [localNot setTimeZone:[NSTimeZone defaultTimeZone]];
                     //localNot.applicationIconBadgeNumber=1;
                     localNot.repeatInterval = 0;
-                    [localNot setAlertAction:@"Go to iReflect"];
+                    [localNot setAlertAction:@"Schedule"];
+                   
                     localNot.soundName=UILocalNotificationDefaultSoundName;
                 
                     //get random quote
@@ -480,19 +532,19 @@
                     if(randomTime) {
                         NSDate *newDay;
                     
-                        int randHour   = (arc4random() % (19-12)) + 12;
+                        int randHour   = (arc4random() % (endTimeLocal-startTimeLocal)) + startTimeLocal;
                         int randMinute = (arc4random() % 59);
                     
                         [randComponents setHour: randHour];
                         [randComponents setMinute: randMinute];
-                        [randComponents setDay: ([randComponents day] +1) ];
+                        [randComponents setDay: ([randComponents day] +1) ]; 
                     
                         newDay = [theCalendar dateFromComponents:randComponents];
                     
                         NSDateFormatter *df =[[NSDateFormatter alloc] init];
                         [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                         NSString *dateInString = [df stringFromDate:newDay];
-                        NSLog(@"random: %@ , int = %d ",dateInString, randHour);
+                        NSLog(@"quote: %@ , random: %@ , int = %d ",quote.quoteEntry, dateInString, randHour);
                     
                         localNot.fireDate=newDay;
                     
@@ -503,10 +555,13 @@
                             [localNot setAlertBody:s];
                             quote.timeStamp=newDay;
                             if((favoriteSelected) && [quote.favorite isEqualToNumber:[NSNumber numberWithInt:1]]) {
-                                self.favoriteCategory.scheduled=[NSNumber numberWithInt:1];
+                                self.favoriteCategory.scheduleType=@"randomTime";
+                                //??
                             } else {
                             //mark the category scheduled
-                                quote.category.scheduled=[NSNumber numberWithInt:1];
+                                quote.category.scheduleType=@"randomTime";
+                                quote.scheduleStart=[NSNumber numberWithInt:startTimeLocal];
+                                quote.scheduleEnd=[NSNumber numberWithInt:endTimeLocal];
                             }
                             [quoteTimes insertObject:newDay atIndex:i];
                             //save context
@@ -547,10 +602,12 @@
                             [quoteTimes insertObject:startDate atIndex:i];
                             //mark category scheduled
                             if((favoriteSelected) && [quote.favorite isEqualToNumber:[NSNumber numberWithInt:1]]) {
-                                self.favoriteCategory.scheduled=[NSNumber numberWithInt:1];
+                                self.favoriteCategory.scheduleType=@"setTime";
                             } else {
                                 //mark the category scheduled
-                                quote.category.scheduled=[NSNumber numberWithInt:1];
+                                quote.category.scheduleType=@"setTime";
+                                quote.scheduleStart=[NSNumber numberWithInt:startTimeLocal];
+                                quote.scheduleEnd=[NSNumber numberWithInt:endTimeLocal];
                             }
 
                             
@@ -605,185 +662,6 @@
 
 
 
-//- (IBAction)done:(UIStoryboardSegue *)segue
-//{
-//    //        AddSightingViewController *addController = [segue sourceViewController];
-//    //        if (addController.birdSighting) {
-//    //            [self.dataController addBirdSightingWithSighting:addController.birdSighting];
-//    //            [[self tableView] reloadData];
-//    //      }
-//
-//    if ([[segue identifier] isEqualToString:@"ReturnInput"]) {
-//                
-//        AddQuoteViewController *addController  = [segue sourceViewController];
-//        if(addController.quoteInput.text) {
-//            
-//        
-//        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-//            
-//            
-//         NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
-//            
-//            
-//            Quote *quoteInput = [NSEntityDescription
-//                                 insertNewObjectForEntityForName:@"Quote"
-//                                 inManagedObjectContext:context];
-//            
-//            quoteInput.quoteEntry = addController.quoteInput.text;
-//    
-//           // Save the context.
-//            NSError *error;
-//            if (![context save:&error]) {
-//                NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
-//            }
-//            
-//       //     NSInteger time = [addController.timeType selectedSegmentIndex];
-//            //set timer using date picker
-//            if (addController.datePicker) {
-//                
-//            UILocalNotification *localNot= [[UILocalNotification alloc] init];
-//                
-////                //
-////                NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-////                
-////                
-////                NSDateComponents *dateComponents = [calendar components:( NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit )
-////                                                               fromDate:pickerDate];
-////                NSDateComponents *timeComponents = [calendar components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit )
-////                                                               fromDate:pickerDate];
-////                
-////                NSDateComponents *dateComps = [[NSDateComponents alloc] init];
-////                [dateComps setDay:[dateComponents day]];
-////                [dateComps setMonth:[dateComponents month]];
-////                [dateComps setYear:[dateComponents year]];
-////                [dateComps setHour:[timeComponents hour]];
-////                [dateComps setMinute:[timeComponents minute]];
-////                [dateComps setSecond:[timeComponents second]];
-////                NSDate *itemDate = [calendar dateFromComponents:dateComps];
-//                
-/////            NSDate *fireTime = [[NSDate date] addTimeInterval:10];
-//            
-//          NSDate *pickerDate = addController.datePicker.date;
-//
-//            [localNot setTimeZone:[NSTimeZone defaultTimeZone]];
-//
-//            localNot.fireDate=pickerDate;
-//            
-//            localNot.applicationIconBadgeNumber=1;
-//            [localNot setAlertBody:quoteInput.quoteEntry];
-//            [localNot setAlertAction:@"OK"];
-//            localNot.soundName=UILocalNotificationDefaultSoundName;
-//            //[not setHasAction:YES];
-//          
-//                NSDictionary *infoDict = [NSDictionary dictionaryWithObject:quoteInput.quoteEntry forKey:@"todoitem"];
-//                localNot.userInfo = infoDict;
-//                
-//           //set the repeat interval
-//                NSInteger index = [addController.intervalPicker selectedSegmentIndex];
-//                switch (index) {
-//                    case 1:
-//                        localNot.repeatInterval = 0;
-//                        break;
-//                    case 2:
-//                        localNot.repeatInterval = NSHourCalendarUnit;
-//                        break;
-//                    case 3:
-//                        localNot.repeatInterval = NSDayCalendarUnit;
-//                        break;
-//                    case 4:
-//                        localNot.repeatInterval = NSWeekCalendarUnit;
-//                        break;
-//                    default:
-//                        localNot.repeatInterval = 0;
-//                        break;
-//                }               //
-//                
-//                
-//            [[UIApplication sharedApplication] scheduleLocalNotification:localNot];
-//            }
-////        //    [localNot release];
-////            
-////             else if (time==0) {
-////                
-////                //set random time
-////
-////                NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-////            
-////                NSDate *currentDate = [NSDate date];
-////                
-////                NSDateComponents *dateComponents = [calendar components:( NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit )
-////                                                                               fromDate:currentDate];
-////                NSDateComponents *timeComponents = [calendar components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit )
-////                                                                fromDate:currentDate];
-////               
-////                //make a random time
-////                
-////                NSDateComponents *dateComps = [[NSDateComponents alloc] init];
-////                
-////                
-////                
-////                
-////                 UILocalNotification *localNotRandom= [[UILocalNotification alloc] init];
-////                
-////                
-////                [localNotRandom setTimeZone:[NSTimeZone defaultTimeZone]];
-////                localNotRandom.applicationIconBadgeNumber=1;
-////                [localNotRandom setAlertBody:quoteInput.quoteEntry];
-////                [localNotRandom setAlertAction:@"OK"];
-////                localNotRandom.soundName=UILocalNotificationDefaultSoundName;
-////                
-////                
-////                //set the repeat interval
-////                NSInteger index = [addController.intervalPicker selectedSegmentIndex];
-////                switch (index) {
-////                    case 1:
-////                        localNotRandom.repeatInterval = 0;
-////                        break;
-////                    case 2:
-////                        localNotRandom.repeatInterval = NSHourCalendarUnit;
-////                        break;
-////                    case 3:
-////                        localNotRandom.repeatInterval = NSDayCalendarUnit;
-////                        break;
-////                    case 4:
-////                        localNotRandom.repeatInterval = NSWeekCalendarUnit;
-////                        break;
-////                    default:
-////                        localNotRandom.repeatInterval = 0;
-////                        break;
-////                }               //
-////                
-////                
-////                [[UIApplication sharedApplication] scheduleLocalNotification:localNotRandom];
-////                
-////                
-////                
-////                
-////                
-////            }
-//
-//            //[self.quoteList addObject:addController.quoteInput.text];
-//            
-//             [[self tableView] reloadData];
-//            
-//        }
-//        
-//        
-//        
-//         [self dismissViewControllerAnimated:YES completion:NULL];
-//    }
-//    
-//    
-//    
-//}
-//
-//- (IBAction)cancel:(UIStoryboardSegue *)segue
-//{
-//    if ([[segue identifier] isEqualToString:@"CancelInput"]) {
-//        [self dismissViewControllerAnimated:YES completion:NULL];
-//    }
-//}
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -829,6 +707,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BasicCell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     
@@ -845,18 +724,31 @@
     
     Categories *cate = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.textLabel.text = cate.name;
+    if([cate.name isEqualToString:@"0AFavorites"]){
+        //add star image to front
+    //    UITableViewCell *cell1 = [tableView dequeueReusableCellWithIdentifier:@"BasicCell" forIndexPath:indexPath];
+    ///   UITableViewCell *cell1=[[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"BasicCell"]];
+        cell.textLabel.textAlignment=NSTextAlignmentLeft;
+        cell.textLabel.text=@"Favorites";
+        cell.imageView.image = [UIImage imageNamed:@"fav_star.png"];
+        //cell.imageView.frame = CGRectMake(1,1,30,30);
+        
+    } else {
+        cell.imageView.image=nil;
+        cell.textLabel.text = cate.name;
     
-    NSLog(@"catescheduld %@ : %@", cate.name, cate.scheduled);
+    }
+   // NSLog(@"catescheduld %@ : %@", cate.name, cate.scheduled);
     
     
     
-    if([cate.scheduled isEqualToNumber:[NSNumber numberWithInt:1]]) {
+    if(![cate.scheduleType isEqualToString:@"none"]) {
         
         cell.detailTextLabel.text=@"Scheduled";
     } else {
          cell.detailTextLabel.text=@" ";
     }
+    
     
     
     
@@ -896,7 +788,7 @@
     }
     
         if(!foundScheduledQuote) {
-            c.scheduled = [NSNumber numberWithInt:0];
+            c.scheduleType = @"none";
         } else {
             foundScheduledQuote=NO;
         }
@@ -906,6 +798,8 @@
     return;
     
 }
+
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -952,7 +846,7 @@
     for (Categories *ca in fetched) {
         
         //only schedule category if there are quotes in it
-        if([ca.quote count] || [ca.name isEqual:@"Favorites"]){
+        if([ca.quote count] || [ca.name isEqual:@"0AFavorites"]){
             [selectedCategoryStrings addObject:ca.name];
             
         }
@@ -1019,7 +913,7 @@
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

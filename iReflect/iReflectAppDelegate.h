@@ -16,7 +16,12 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic) BOOL newQuotesScheduled;
+
+
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+
+-(NSArray *)getDataFromModel:(NSString *)dataType ;
 
 @end

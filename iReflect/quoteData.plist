@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>You can&apos;t plough a field by turning it over in your mind.</string>
+			<string>Unknown</string>
+		</array>
+		<key>name</key>
+		<string>Values</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>Shout a random (clean) word out loud.</string>
+			<string>Unknown</string>
+		</array>
+		<key>name</key>
+		<string>Make Me Uncomfortable</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>You can&apos;t plough a field by turning it over in your mind.</string>
+			<string>Unknown</string>
+		</array>
+		<key>name</key>
+		<string>Commitment</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>Select a word, a noun, the name of an everyday object such as pencil or apple.  Envision that object. Say the word over and over again (out loud if you are not in public) rapidly for a half a minute. Observe your thoughts as you do this.  Now do the same using an adjective such as stinky or worthless.</string>
+			<string>unknown</string>
+			<string> Focus on your breathing for just one minute. When you catch your mind wandering,  refocus on the rise and fall of your breath and let thoughts go as they arise.</string>
+			<string>unknown</string>
+			<string>Pick a natural organism that is within your sight and focus on watching it for one minute; perhaps a flower or insect. Try not to think of anything else. Simply observe the organism in all its glory for one full minute.</string>
+			<string>www.pocketmindfulness.com</string>
+			<string>Put your hand on a table or nearby flat surface for one minute.  Focus on your hand and how it feels.</string>
+			<string>unknown</string>
+		</array>
+		<key>name</key>
+		<string>Mindfulness Exercises</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>I am grateful for my family.</string>
+			<string>me</string>
+			<string>I am grateful for my children.</string>
+			<string>me</string>
+			<string>I am grateful for my health.</string>
+			<string>none</string>
+		</array>
+		<key>name</key>
+		<string>Gratitude</string>
+	</dict>
+	<dict>
+		<key>quoteEntry</key>
+		<array>
+			<string>test</string>
+			<string>St. Francis of Assisi</string>
+			<string>Christ has no body now on earth but yours,
+no hands but yours,
+no feet but yours,
+Yours are the eyes through which to look out
+Christ&apos;s compassion to the world
+Yours are the feet with which he is to go about
+doing good;
+Yours are the hands with which he is to bless men now.
+</string>
+			<string>St. Teresa of Avila</string>
+			<string>test2</string>
+			<string>Mother Teresa</string>
+		</array>
+		<key>name</key>
+		<string>Prayers</string>
+	</dict>
+</array>
+</plist>
