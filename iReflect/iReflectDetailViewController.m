@@ -60,7 +60,13 @@
 		exit(-1);  // Fail
 	}
     
-    self.title = self.cate.name ;
+    
+    if([self.cate.name isEqualToString:@"0AFavorites"]){
+        self.title = @"Favorites";
+    } else {
+        self.title = self.cate.name ;
+
+    }
 
     
   //  [self configureView];

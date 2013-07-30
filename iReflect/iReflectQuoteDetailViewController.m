@@ -53,9 +53,15 @@
     
 //    self.tableView.backgroundColor = [UIColor blueColor];
 //    self.tableView.backgroundView = nil;
-//    
+//
+    if([self.category isEqualToString:@"0AFavorites"]){
+        self.title = @"Favorites";
+    } else {
+        self.title = self.category;
+        
+    }
 
-    self.title = self.category;
+
     
 
 //    self.authorOut.text = self.quoteObject.author;

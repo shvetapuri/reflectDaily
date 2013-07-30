@@ -8,7 +8,7 @@
 
 #import "iReflectAppDelegate.h"
 
-#import "iReflectMasterViewController.h"
+#import "iReflectViewController.h"
 #import "Quote.h"
 #import "Categories.h"
 
@@ -92,21 +92,31 @@
     [self customizeAppearance];
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    iReflectMasterViewController *controller = (iReflectMasterViewController *)navigationController.topViewController;
+    iReflectViewController *controller = (iReflectViewController *)navigationController.topViewController;
     navigationController.toolbarHidden=NO;
     
     controller.managedObjectContext = self.managedObjectContext;
-    if(self.newQuotesScheduled==1)
-    {   controller.newQuotesScheduled=1; }
+
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
     if (![defaults objectForKey:@"firstRun"])
     {
         [defaults setObject:[NSDate date] forKey:@"firstRun"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self loadDataFromPropertyList];
     }
-
+    
+//    if(self.newQuotesScheduled==1)
+//    {
+//        [defaults setBool:YES forKey:@"localNotifsScheduled"];
+//        
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    } else {
+//        [defaults setBool:NO forKey:@"localNotifsScheduled"];
+//        
+//        [[NSUserDefaults standardUserDefaults] synchronize];
+//    }
     
 //    UILocalNotification *notification = [launchOptions objectForKey:
 //                                         UIApplicationLaunchOptionsLocalNotificationKey];
@@ -183,7 +193,7 @@
     
     for (NSDictionary *dict in items) {
         Categories *c = [NSEntityDescription insertNewObjectForEntityForName:@"Categories" inManagedObjectContext:ctx];
-        
+    
         [c setName:[dict objectForKey:@"name"]];
         
         if([[dict objectForKey:@"quoteEntry"] count]) {
@@ -213,15 +223,51 @@
 
 - (void)application:(UIApplication *)application
 didReceiveLocalNotification:(UILocalNotification *)notification {
+    
+    UIApplicationState state = [application applicationState];
+    
+    //if app is active, and ireflect message arrives, show it
+    if (state == UIApplicationStateActive) {
+        //[[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+        
+        UIAlertView *notifAlert = [[UIAlertView alloc]
+                              initWithTitle:@"iReflect"
+                              message:notification.alertBody
+                              delegate: nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [notifAlert show];
+        
+        
+
+    }
+    
     self.newQuotesScheduled = 0;
     
-    NSLog(@"in didreceive local notif");
     
     int n = [[[UIApplication sharedApplication] scheduledLocalNotifications] count];
     int x = 64 - n;
 
     
     [self scheduleQuotes:x];
+
+//    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"localNotifsScheduled"];
+//    
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//    NSLog(@"in didreceive local notif");
+    
+//    //if app schedules new local notifs then let the user know
+//    if(state == UIApplicationStateInactive) {
+//    UIAlertView *alert = [[UIAlertView alloc]
+//                          initWithTitle:@"Alert"
+//                          message: @"New reflections have been added to the schedule"
+//                          delegate: nil
+//                          cancelButtonTitle:@"OK"
+//                          otherButtonTitles:nil];
+//    [alert show];
+//
+//     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//    }
     
 //    UIApplicationState applicationState = application.applicationState;
 //    if (applicationState == UIApplicationStateActive) {
@@ -322,7 +368,7 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
     [localNot setTimeZone:[NSTimeZone defaultTimeZone]];
     //localNot.applicationIconBadgeNumber=1;
     localNot.repeatInterval = 0;
-    [localNot setAlertAction:@"Schedule!"];    
+    [localNot setAlertAction:@"iReflect"];    
     localNot.soundName=UILocalNotificationDefaultSoundName;    
      localNot.fireDate=newDay;
     [localNot setAlertBody:quoteObject.quoteEntry];

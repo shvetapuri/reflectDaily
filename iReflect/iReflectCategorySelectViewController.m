@@ -103,8 +103,13 @@ return cell;
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *cateName = [self.categoryArray objectAtIndex:indexPath.row];
 
-    cell.textLabel.text=[self.categoryArray objectAtIndex:indexPath.row];
+    if([cateName isEqualToString:@"0AFavorites"]){
+        cell.textLabel.text=@"Favorites";
+    } else {
+        cell.textLabel.text=cateName;
+    }
    
 }
 

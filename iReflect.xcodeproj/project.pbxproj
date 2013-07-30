@@ -31,6 +31,7 @@
 		E653EB9916979F4400184C06 /* iReflectScheduleQuotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E653EB9816979F4400184C06 /* iReflectScheduleQuotesViewController.m */; };
 		E65812A6171BBA0A003845FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65812A5171BBA0A003845FD /* QuartzCore.framework */; };
 		E65CCD1E178F1F0200A861CB /* topImage.png in Resources */ = {isa = PBXBuildFile; fileRef = E65CCD1D178F1F0200A861CB /* topImage.png */; };
+		E65CCD69179750B500A861CB /* iReflectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E65CCD68179750B500A861CB /* iReflectViewController.m */; };
 		E661B13F16CDEFFD0099FBE6 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = E661B13E16CDEFFD0099FBE6 /* View.xib */; };
 		E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */; };
 		E66AE574174D7070000E2A72 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = E66AE573174D7070000E2A72 /* star.png */; };
@@ -80,6 +81,8 @@
 		E653EB9816979F4400184C06 /* iReflectScheduleQuotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectScheduleQuotesViewController.m; sourceTree = "<group>"; };
 		E65812A5171BBA0A003845FD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E65CCD1D178F1F0200A861CB /* topImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topImage.png; sourceTree = "<group>"; };
+		E65CCD67179750B500A861CB /* iReflectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectViewController.h; sourceTree = "<group>"; };
+		E65CCD68179750B500A861CB /* iReflectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectViewController.m; sourceTree = "<group>"; };
 		E661B13E16CDEFFD0099FBE6 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
 		E66AE570174C168C000E2A72 /* iReflectMainPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectMainPageViewController.h; sourceTree = "<group>"; };
 		E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectMainPageViewController.m; sourceTree = "<group>"; };
@@ -165,6 +168,8 @@
 				E653EB8C16979EEB00184C06 /* iReflectMasterViewController.h */,
 				E653EB8D16979EEB00184C06 /* iReflectMasterViewController.m */,
 				E653EB8616979EEB00184C06 /* MainStoryboard.storyboard */,
+				E65CCD67179750B500A861CB /* iReflectViewController.h */,
+				E65CCD68179750B500A861CB /* iReflectViewController.m */,
 				E66AE570174C168C000E2A72 /* iReflectMainPageViewController.h */,
 				E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */,
 				E60E15ED172213B200D8CCA3 /* iReflectEditQuoteViewController.h */,
@@ -301,6 +306,7 @@
 				E6D55A1A1708E63600995E69 /* iReflectCategorySelectViewController.m in Sources */,
 				E60E15EF172213B300D8CCA3 /* iReflectEditQuoteViewController.m in Sources */,
 				E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */,
+				E65CCD69179750B500A861CB /* iReflectViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
