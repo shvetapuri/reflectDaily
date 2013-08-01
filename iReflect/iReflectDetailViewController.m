@@ -18,6 +18,7 @@
 @end
 
 @implementation iReflectDetailViewController
+
 @synthesize managedObjectContext=_managedObjectContext;
 @synthesize fetchedResultsController = _fetchedResultsController;
 @synthesize cate=_cate;
@@ -63,6 +64,7 @@
     
     if([self.cate.name isEqualToString:@"0AFavorites"]){
         self.title = @"Favorites";
+        self.addButton.enabled=NO;
     } else {
         self.title = self.cate.name ;
 
@@ -113,23 +115,46 @@
                 NSArray *sortedArray;
                 sortedArray = [fetchedQuotes sortedArrayUsingDescriptors:sortDescriptors];
                 
-                //calculate a time to schedule new quote by adding a day to the latest time
+                //calculate a time to schedule new quote by adding a day to the latest time if schedule is type set time. if it is random
+                //then check time window and schedule at a random time +1 day
                 
                 //find latest time add a day to it
                 Quote *quoteWithLastTime = [sortedArray objectAtIndex:0];
                 NSDate *lastTime = quoteWithLastTime.timeStamp;
                 NSCalendar *theCalendar = [NSCalendar currentCalendar];
-                NSDateComponents *dayComponent = [[NSDateComponents alloc] init] ;
-                dayComponent.day = 1;
                 
-                NSDate *newQuoteDate= [theCalendar dateByAddingComponents:dayComponent toDate:lastTime options:0];
+                NSDate *newQuoteDate;
+                
+                
+                if([self.cate.scheduleType isEqualToString:@"randomTime"]) {
+                    //if random time
+                    int endTimeLocal = [quoteWithLastTime.scheduleEnd intValue ];
+                    int startTimeLocal = [quoteWithLastTime.scheduleStart intValue];
+                    
+                    int randHour   = (arc4random() % (endTimeLocal-startTimeLocal)) + startTimeLocal;
+                    int randMinute = (arc4random() % 59);
+                    
+                    NSDateComponents *randComponents = [[NSDateComponents alloc]init ];
+                    randComponents=[theCalendar components:(NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:lastTime];
+
+                    [randComponents setHour: randHour];
+                    [randComponents setMinute: randMinute];
+                    [randComponents setDay: ([randComponents day] +1) ];
+                    
+                newQuoteDate = [theCalendar dateFromComponents:randComponents];
+                    
+                } else {
+                    NSDateComponents *dayComponent = [[NSDateComponents alloc] init] ;
+                    dayComponent.day = 1;
+                    newQuoteDate = [theCalendar dateByAddingComponents:dayComponent toDate:lastTime options:0];
+                }
                 
                 //schedule alert
                 UILocalNotification *localNot= [[UILocalNotification alloc] init];
                 [localNot setTimeZone:[NSTimeZone defaultTimeZone]];
                 //localNot.applicationIconBadgeNumber=1;
                 localNot.repeatInterval = 0;
-                [localNot setAlertAction:@"Go to iReflect"];
+                [localNot setAlertAction:@"iReflect"];
                 localNot.soundName=UILocalNotificationDefaultSoundName;
                 localNot.AlertBody = addController.quoteInput.text;
                 localNot.fireDate = newQuoteDate;
@@ -257,6 +282,9 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if([self.cate.name isEqualToString:@"0AFavorites"]){
+        return NO;
+    }
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }

@@ -36,6 +36,8 @@
 		E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */; };
 		E66AE574174D7070000E2A72 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = E66AE573174D7070000E2A72 /* star.png */; };
 		E66AE576174D77A6000E2A72 /* star_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = E66AE575174D77A6000E2A72 /* star_gray.png */; };
+		E675D60117A841F600A70B8F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E675D60017A841F500A70B8F /* StoreKit.framework */; };
+		E675D60417A8424C00A70B8F /* InAppPurchaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E675D60317A8424B00A70B8F /* InAppPurchaseManager.m */; };
 		E68E079016AA5C680046FF41 /* Quote.m in Sources */ = {isa = PBXBuildFile; fileRef = E68E078F16AA5C680046FF41 /* Quote.m */; };
 		E68E079316AA5C900046FF41 /* Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = E68E079216AA5C900046FF41 /* Categories.m */; };
 		E6B087B716BDB62E000BE8D1 /* iReflectAddQuoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B087B616BDB62E000BE8D1 /* iReflectAddQuoteViewController.m */; };
@@ -88,6 +90,9 @@
 		E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectMainPageViewController.m; sourceTree = "<group>"; };
 		E66AE573174D7070000E2A72 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = ../../Documents/iphone/TasteBankPics/star.png; sourceTree = "<group>"; };
 		E66AE575174D77A6000E2A72 /* star_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star_gray.png; path = ../../Documents/iphone/iReflectPics/star_gray.png; sourceTree = "<group>"; };
+		E675D60017A841F500A70B8F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		E675D60217A8424B00A70B8F /* InAppPurchaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchaseManager.h; sourceTree = "<group>"; };
+		E675D60317A8424B00A70B8F /* InAppPurchaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchaseManager.m; sourceTree = "<group>"; };
 		E68E078E16AA5C680046FF41 /* Quote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quote.h; path = ../Quote.h; sourceTree = "<group>"; };
 		E68E078F16AA5C680046FF41 /* Quote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Quote.m; path = ../Quote.m; sourceTree = "<group>"; };
 		E68E079116AA5C8F0046FF41 /* Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Categories.h; sourceTree = "<group>"; };
@@ -109,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E675D60117A841F600A70B8F /* StoreKit.framework in Frameworks */,
 				E65812A6171BBA0A003845FD /* QuartzCore.framework in Frameworks */,
 				E653EB6D16979EEB00184C06 /* UIKit.framework in Frameworks */,
 				E653EB6F16979EEB00184C06 /* Foundation.framework in Frameworks */,
@@ -151,6 +157,7 @@
 		E653EB6B16979EEB00184C06 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E675D60017A841F500A70B8F /* StoreKit.framework */,
 				E65812A5171BBA0A003845FD /* QuartzCore.framework */,
 				E653EB6C16979EEB00184C06 /* UIKit.framework */,
 				E653EB6E16979EEB00184C06 /* Foundation.framework */,
@@ -163,6 +170,8 @@
 		E653EB7416979EEB00184C06 /* iReflect */ = {
 			isa = PBXGroup;
 			children = (
+				E675D60217A8424B00A70B8F /* InAppPurchaseManager.h */,
+				E675D60317A8424B00A70B8F /* InAppPurchaseManager.m */,
 				E653EB7D16979EEB00184C06 /* iReflectAppDelegate.h */,
 				E653EB7E16979EEB00184C06 /* iReflectAppDelegate.m */,
 				E653EB8C16979EEB00184C06 /* iReflectMasterViewController.h */,
@@ -307,6 +316,7 @@
 				E60E15EF172213B300D8CCA3 /* iReflectEditQuoteViewController.m in Sources */,
 				E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */,
 				E65CCD69179750B500A861CB /* iReflectViewController.m in Sources */,
+				E675D60417A8424C00A70B8F /* InAppPurchaseManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

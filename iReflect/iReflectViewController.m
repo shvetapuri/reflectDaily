@@ -16,7 +16,7 @@
 #import "Categories.h"
 @interface iReflectViewController ()
 @property (strong, nonatomic) Categories *favoriteCategory;
-@property (strong, nonatomic) IBOutlet UILabel *dailyQuoteLabel;
+@property (strong, nonatomic) IBOutlet UITextView *dailyQuoteLabel;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -56,16 +56,7 @@
     //  [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"iReflect_tableBackgnd.png"]]];
     
     //daily quote label
-    self.dailyQuoteLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 160)];
-    self.dailyQuoteLabel.font=[UIFont fontWithName:@"Georgia"  size:13];
-    self.dailyQuoteLabel.backgroundColor =[UIColor clearColor];
-    self.dailyQuoteLabel.numberOfLines = 0;
-    self.dailyQuoteLabel.textAlignment = NSTextAlignmentCenter;
-    
-    [self.view addSubview:self.imageView];
-    //[self.view bringSubviewToFront:self.dailyQuoteLabel];
-    [self.imageView addSubview:self.dailyQuoteLabel];
-    
+    [self addDailyQuoteLabel];
     
     //    UIBarButtonItem *buttonItem;
     ////
@@ -101,7 +92,21 @@
     //  self.navigationItem.rightBarButtonItem = addButton;
 }
 
+-(void)addDailyQuoteLabel{
+    self.dailyQuoteLabel=[[UITextView alloc]initWithFrame:CGRectMake(0, 0, 320, 160)];
+    self.dailyQuoteLabel.font=[UIFont fontWithName:@"Georgia"  size:13];
+    self.dailyQuoteLabel.backgroundColor =[UIColor clearColor];
+    //self.dailyQuoteLabel.numberOfLines = 0;
+    self.dailyQuoteLabel.textAlignment = NSTextAlignmentCenter;
+    self.dailyQuoteLabel.userInteractionEnabled=YES;
+    self.dailyQuoteLabel.scrollEnabled=YES;
+    self.dailyQuoteLabel.editable=NO;
+    
+    [self.view addSubview:self.imageView];
+    //[self.view bringSubviewToFront:self.dailyQuoteLabel];
+    [self.imageView addSubview:self.dailyQuoteLabel];
 
+}
 
 //-(void) showNewQuotesScheduledAlert {
 //    
@@ -122,6 +127,11 @@
 //}
 
 - (void)viewDidAppear:(BOOL)animated {
+    [self addFavoriteCategory];
+    
+    
+    [self updateScheduledLabel];
+    
     self.dailyQuoteLabel.text=[self getDailyQuote ];
 
 //    [super viewDidAppear:YES];
@@ -143,10 +153,7 @@
     [super viewWillAppear:YES];
 
     
-    [self addFavoriteCategory];
     
-       
-    [self updateScheduledLabel];
 }
 -(NSArray *) getCurrentQuoteObjects{
     NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
@@ -207,7 +214,9 @@
         }
     }
     
-    Quote *latestQuote = [sortedArray objectAtIndex:0];
+//    //if no quote has a timestamp then get random quote
+//    unsigned index= (arc4random() % [sortedArray count]);
+    Quote *latestQuote = sortedArray[0];
     NSLog(@"HEre is  QUOTE : %@",latestQuote.quoteEntry);
     return (latestQuote.quoteEntry);
     
@@ -318,7 +327,27 @@
  	}
 }
 
+-(void)cancelAllReflections {
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+    //delete timestamp in quote object
+    NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
+    for (Categories *ca in fetched) {
+        ca.scheduleType = @"none";
+        for(Quote *q in ca.quote) {
+            
+            q.timeStamp = nil;
+            
+        }
+    }
+    NSError *error;
+    if (![self.managedObjectContext save:&error]) {
+        NSLog(@"couldn't erase timestamp: %@", [error localizedDescription]);
+    }
+    
+    [self.tableView reloadData];
 
+}
 
 
 -(void) saveContext {
@@ -486,7 +515,9 @@
         
         //cancel all exisiting notifications
         
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+       // [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        
+        [self cancelAllReflections];
         
         NSArray *fetched = [self.fetchedResultsController fetchedObjects] ;
         
