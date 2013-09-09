@@ -194,6 +194,18 @@
     } else {
         path = [[NSBundle mainBundle] pathForResource:@"quoteData" ofType:@"plist"];
     }
+    if(path==nil) {
+        NSString *plistName = [propertyList stringByAppendingString:@".plist"];
+        
+        //check for file in /Library/Application directory for files downloaded from server
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *directory = [paths objectAtIndex:0];
+        directory = [directory stringByAppendingPathComponent:@"Downloads"];
+        path= [directory stringByAppendingPathComponent:plistName];
+        
+        NSLog(@"path: %@",path);
+        
+    }
     
     if(path) {
     NSArray *items = [NSArray arrayWithContentsOfFile:path];
@@ -230,6 +242,8 @@
     }
     } else {
         NSLog(@"file not found");
+        
+        
     }
 }
 

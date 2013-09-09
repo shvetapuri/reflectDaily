@@ -164,7 +164,7 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
                 //??
                 [self processDownload:download]; // not written yet
                 // now we're done
-[[SKPaymentQueue defaultQueue] finishTransaction:download.transaction];
+                [self completeTransaction:download.transaction];
                 
                 break;
             default:
@@ -191,6 +191,7 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     for (NSString *file in files) {
         NSString *fullPathSrc = [path stringByAppendingPathComponent:file];
         NSString *fullPathDst = [dir stringByAppendingPathComponent:file];
+        NSLog(@"fullPathDst: %@",fullPathDst);
         
         // not allowed to overwrite files - remove destination file
         [fileManager removeItemAtPath:fullPathDst error:NULL];
