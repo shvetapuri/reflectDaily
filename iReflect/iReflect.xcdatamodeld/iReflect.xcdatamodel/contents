@@ -11,7 +11,7 @@
         <attribute name="quoteEntry" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="scheduleEnd" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="scheduleStart" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="timeStamp" optional="YES" attributeType="Date">
+        <attribute name="timeStamp" optional="YES" attributeType="Date" defaultDateTimeInterval="0" defaultValueString="nil">
             <userInfo/>
         </attribute>
         <relationship name="category" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Categories" inverseName="quote" inverseEntity="Categories" syncable="YES"/>

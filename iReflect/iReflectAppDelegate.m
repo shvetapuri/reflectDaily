@@ -7,7 +7,7 @@
 //
 
 #import "iReflectAppDelegate.h"
-
+#import "iReflectIAPHelper.h"
 #import "iReflectViewController.h"
 #import "Quote.h"
 #import "Categories.h"
@@ -32,8 +32,8 @@
 //    [[UINavigationBar appearance] setBackgroundImage:gradientImage32
 //                                       forBarMetrics:UIBarMetricsLandscapePhone];
     
-    [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
-     [[UIToolbar appearance] setTintColor:[UIColor brownColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
+     [[UIToolbar appearance] setTintColor:[UIColor blackColor]];
    
 //    // Customize the title text for *all* UINavigationBars
 //    [[UINavigationBar appearance] setTitleTextAttributes:
@@ -88,7 +88,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 {
-
+    [iReflectIAPHelper sharedInstance];
     [self customizeAppearance];
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
@@ -104,7 +104,7 @@
     {
         [defaults setObject:[NSDate date] forKey:@"firstRun"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [self loadDataFromPropertyList];
+        [self loadDataFromPropertyList:nil];
     }
     
 //    if(self.newQuotesScheduled==1)
@@ -185,8 +185,17 @@
     return YES;
 }
 
-- (void)loadDataFromPropertyList {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"quoteData" ofType:@"plist"];
+- (void)loadDataFromPropertyList:(NSString *)propertyList {
+    NSString *path;
+    
+    if(propertyList) {
+        path = [[NSBundle mainBundle] pathForResource:propertyList ofType:@"plist"];
+
+    } else {
+        path = [[NSBundle mainBundle] pathForResource:@"quoteData" ofType:@"plist"];
+    }
+    
+    if(path) {
     NSArray *items = [NSArray arrayWithContentsOfFile:path];
     
     NSManagedObjectContext *ctx = self.managedObjectContext;
@@ -218,6 +227,9 @@
     
     if (err != nil) {
         NSLog(@"error saving managed object context: %@", err);
+    }
+    } else {
+        NSLog(@"file not found");
     }
 }
 

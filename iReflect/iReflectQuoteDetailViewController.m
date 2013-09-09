@@ -121,11 +121,25 @@
 
 - (IBAction)shareButtonAction:(UIBarButtonItem *)sender {
     
-    NSArray* dataToShare = @[self.quoteObject.quoteEntry, self.quoteObject.author];
+   // UIImage *image = [UIImage imageNamed:@"iReflectIcon_57.png"];
+
+    NSAttributedString *appName=[[NSMutableAttributedString alloc] initWithString:@"iReflect" attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:[UIFont systemFontSize]],NSForegroundColorAttributeName:[UIColor brownColor]}];
+    NSArray *dataToShare;
     
+    if([self.quoteObject.author length]){
+        dataToShare = [NSArray arrayWithObjects:@"", appName, self.quoteObject.quoteEntry,[@"-" stringByAppendingString:self.quoteObject.author],nil];
+
+    } else {
+       dataToShare = [NSArray arrayWithObjects:@"", appName, self.quoteObject.quoteEntry,nil];
+
+    }
+    
+       
     UIActivityViewController* activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:dataToShare
                                       applicationActivities:nil];
+    //[activityViewController setValue:@"A Reflection from iReflect" forKey:@"subject"];
+    
     [self presentViewController:activityViewController animated:YES completion:^{}];
 }
 

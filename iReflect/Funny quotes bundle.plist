@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>funny quotes</string>
+		<key>quoteEntry</key>
+		<array>
+			<string>To a man with a hammer everything looks like a nail.</string>
+			<string>Mark Twain</string>
+		</array>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>jokes</string>
+		<key>quoteEntry</key>
+		<array>
+			<string>Why did the chicken cross the road? to get to the other side</string>
+			<string>unknown</string>
+		</array>
+	</dict>
+</array>
+</plist>

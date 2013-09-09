@@ -12,14 +12,20 @@
 #import "iReflectScheduleQuotesViewController.h"
 #import "iReflectAppDelegate.h"
 
+#import "iReflectIAPTableViewController.h"
+
 #import "Quote.h"
 #import "Categories.h"
 @interface iReflectViewController ()
 @property (strong, nonatomic) Categories *favoriteCategory;
-@property (strong, nonatomic) IBOutlet UITextView *dailyQuoteLabel;
+//@property (strong, nonatomic) IBOutlet UITextView *dailyQuoteLabel;
+@property (strong, nonatomic) IBOutlet UILabel *dailyQuoteLabel;
+@property (weak, nonatomic) IBOutlet UIButton *storeButton;
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak,nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (strong, nonatomic) iReflectAppDelegate *appDelegate;
 @end
@@ -52,28 +58,7 @@
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tableview_bkgnd.png"]];
     self.tableView.backgroundView = imageView;
     
-    
-    //  [[self view] setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"iReflect_tableBackgnd.png"]]];
-    
-    //daily quote label
-    [self addDailyQuoteLabel];
-    
-    //    UIBarButtonItem *buttonItem;
-    ////
-    // //   buttonItem = [[ UIBarButtonItem alloc ] initWithTitle: @"Cancel all Reminders"
-    //                                                    style: UIBarButtonItemStyleBordered
-    //                                                   target: self
-    //                                                   action: @selector(scheduleCancel:)
-    //
-    //                                                ];
-    //
-    //    self.toolbarItems =
-    //    buttonItem = [[ UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(scheduleReminder)];
-    
-    //   self.toolbarItems = [ NSArray arrayWithObject: buttonItem ];
-    
-    
-    
+    [self initQuoteLabel];
     
     NSError *error;
 	if (![[self fetchedResultsController] performFetch:&error]) {
@@ -90,22 +75,149 @@
     
     //   UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //  self.navigationItem.rightBarButtonItem = addButton;
+    
+    
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.tableView attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
+    
+  //  [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
+    
+    
 }
 
--(void)addDailyQuoteLabel{
-    self.dailyQuoteLabel=[[UITextView alloc]initWithFrame:CGRectMake(0, 0, 320, 160)];
-    self.dailyQuoteLabel.font=[UIFont fontWithName:@"Georgia"  size:13];
+-(void)showStoreButton {
+//    UIButton *storeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    storeButton.frame = CGRectMake(0, 0, 72, 37);
+//    [storeButton setTitle:@"Store" forState:UIControlStateNormal];
+//    [storeButton addTarget:self action:@selector(storeButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.imageView addSubview:self.storeButton];
+    [self.imageView bringSubviewToFront:self.storeButton];
+}
+
+-(void)storeButtonTapped:(id)sender {
+    
+}
+- (void)viewDidAppear:(BOOL)animated {
+    [self addFavoriteCategory];
+    
+    
+    //daily quote label
+    [self addDailyQuoteLabel];
+        
+    [self showStoreButton];
+
+    [self updateScheduledLabel];
+    
+    
+}
+
+-(void)initQuoteLabel {
+    self.dailyQuoteLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 315, 155)];
+    
+    //self.dailyQuoteLabel.font=[UIFont fontWithName:@"Georgia"  size:13];
     self.dailyQuoteLabel.backgroundColor =[UIColor clearColor];
-    //self.dailyQuoteLabel.numberOfLines = 0;
     self.dailyQuoteLabel.textAlignment = NSTextAlignmentCenter;
     self.dailyQuoteLabel.userInteractionEnabled=YES;
-    self.dailyQuoteLabel.scrollEnabled=YES;
-    self.dailyQuoteLabel.editable=NO;
-    
-    [self.view addSubview:self.imageView];
-    //[self.view bringSubviewToFront:self.dailyQuoteLabel];
-    [self.imageView addSubview:self.dailyQuoteLabel];
+   
+   // self.dailyQuoteLabel.textColor=[UIColor whiteColor];
 
+}
+-(void)addDailyQuoteLabel{
+    
+    NSString *dailyQuote=[self getDailyQuote ];
+    
+    self.dailyQuoteLabel.text=dailyQuote;
+    
+    self.dailyQuoteLabel.numberOfLines=0;
+    self.dailyQuoteLabel.lineBreakMode=NSLineBreakByWordWrapping;
+    [self resizeFontForLabel:self.dailyQuoteLabel maxSize:20 minSize:12];
+    [self.dailyQuoteLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self addScrollView];
+
+
+}
+
+-(void)addScrollView {
+    UIScrollView *myScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 315.0f, 155.0f)];
+       myScroll.contentSize = CGSizeMake(myScroll.contentSize.width, self.dailyQuoteLabel.frame.size.height);
+    myScroll.userInteractionEnabled=YES;
+    myScroll.scrollEnabled=YES;
+    
+    [myScroll setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    // add myLabel
+    [myScroll addSubview:self.dailyQuoteLabel];
+    // add scroll view to main view
+    [self.imageView addSubview:myScroll];
+    [self.view addSubview:self.imageView];
+    
+ ///   [self.dailyQuoteLabel setCenter:self.imageView.center];
+    
+    
+ ///   [myScroll setCenter:self.imageView.center];
+    NSLayoutConstraint *constr = [NSLayoutConstraint
+                                  constraintWithItem:self.dailyQuoteLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
+    
+    [self.imageView addConstraint:constr];
+   
+    NSLayoutConstraint *constr1 = [NSLayoutConstraint
+                                  constraintWithItem:self.dailyQuoteLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
+
+    [self.imageView addConstraint:constr1];
+
+    
+    NSLayoutConstraint *constr2 = [NSLayoutConstraint
+                                   constraintWithItem:self.dailyQuoteLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
+    
+    [self.imageView addConstraint:constr2];
+    
+    NSLayoutConstraint *constr3 = [NSLayoutConstraint
+                                   constraintWithItem:self.dailyQuoteLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:155];
+    
+    [self.imageView addConstraint:constr3];
+
+    
+    
+    NSLayoutConstraint *constrScroll = [NSLayoutConstraint
+                                  constraintWithItem:myScroll attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
+    
+    [self.imageView addConstraint:constrScroll];
+    
+    NSLayoutConstraint *constrScroll1 = [NSLayoutConstraint
+                                        constraintWithItem:myScroll attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
+    
+    [self.imageView addConstraint:constrScroll1];
+
+    NSLayoutConstraint *constrScroll2 = [NSLayoutConstraint
+                                         constraintWithItem:myScroll attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.imageView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
+    
+    [self.imageView addConstraint:constrScroll2];
+
+    NSLayoutConstraint *constrScroll3 = [NSLayoutConstraint
+                                   constraintWithItem:myScroll attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:155];
+    
+    [self.imageView addConstraint:constrScroll3];
+
+}
+- (void)resizeFontForLabel:(UILabel*)aLabel maxSize:(int)maxSize minSize:(int)minSize {
+    // use font from provided label so we don't lose color, style, etc
+    UIFont *font = aLabel.font;
+    
+    // start with maxSize and keep reducing until it doesn't clip
+    for(int i = maxSize; i >= minSize; i--) {
+        font = [font fontWithSize:i];
+        CGSize constraintSize = CGSizeMake(aLabel.frame.size.width, MAXFLOAT);
+        
+        // This step checks how tall the label would be with the desired font.
+        CGSize labelSize = [aLabel.text sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+        if(labelSize.height <= aLabel.frame.size.height)
+            break;
+    }
+    // Set the UILabel's font to the newly adjusted font.
+    aLabel.font = font;
+    if(font==[font fontWithSize:12]){
+        [self.dailyQuoteLabel sizeToFit];
+    }
 }
 
 //-(void) showNewQuotesScheduledAlert {
@@ -126,26 +238,8 @@
 //    
 //}
 
-- (void)viewDidAppear:(BOOL)animated {
-    [self addFavoriteCategory];
-    
-    
-    [self updateScheduledLabel];
-    
-    self.dailyQuoteLabel.text=[self getDailyQuote ];
 
-//    [super viewDidAppear:YES];
-//    
-//    BOOL didScheduleNotifs=[[NSUserDefaults standardUserDefaults]  boolForKey:@"localNotifsScheduled"];
-//    NSLog(@"bool vaue %d",didScheduleNotifs);
-//    
-//    if(didScheduleNotifs) {
-//        NSLog(@"in alert show");
-//        
-//     //   [self showNewQuotesScheduledAlert];
-//    
-//    }
-}
+
 
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -184,7 +278,7 @@
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:ascending] ;
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSArray *sortedArray;
+    NSArray *sortedArray=[[NSArray alloc] init ];
     sortedArray = [quotesArray sortedArrayUsingDescriptors:sortDescriptors];
     
     return sortedArray;
@@ -197,6 +291,7 @@
     NSDate *dateToday = [NSDate date];
     for (Quote *findLatest in sortedArray ) {
                 
+     //   NSLog(@"array ascending : %@\n", findLatest.quoteEntry);
         
         if(findLatest.timeStamp) {
             NSDate *latestDate = findLatest.timeStamp;
@@ -207,17 +302,29 @@
 
             
             if([self daysBetweenDate:dateToday andDate:latestDate]==0) {
-                NSLog(@"HEre is latest QUOTE : %@",findLatest.quoteEntry);
-                
+              
                 return (findLatest.quoteEntry);
             }
+            
+        }
+        
+        
+    }
+    
+    //if you don't find a quote of today, then pick the next date
+    for (Quote *findQuote in sortedArray ) {
+                
+        if(findQuote.timeStamp) {
+            return (findQuote.quoteEntry);
+
         }
     }
     
+    
 //    //if no quote has a timestamp then get random quote
-//    unsigned index= (arc4random() % [sortedArray count]);
-    Quote *latestQuote = sortedArray[0];
-    NSLog(@"HEre is  QUOTE : %@",latestQuote.quoteEntry);
+    unsigned index= (arc4random() % [sortedArray count]);
+    Quote *latestQuote = sortedArray[index];
+    NSLog(@"HEre is  QUOTE : %@ timestamp ",latestQuote.quoteEntry);
     return (latestQuote.quoteEntry);
     
 }
@@ -383,7 +490,22 @@
     
 }
 
+-(IBAction)displayStore:(id)sender {
+    if ([SKPaymentQueue canMakePayments]) {
+        // Display a store to the user.
+    } else {
+        [self showAlertPurchaseDisabled];
+        
+    }
+    
+}
 
+-(void)showAlertPurchaseDisabled {
+    
+    UIAlertView *purchaseAlert = [[UIAlertView alloc] initWithTitle:@"Warning" message: @"Purchasing is disabled on your app.  Please go to Settings to change." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [purchaseAlert show];
+
+}
 - (IBAction)done:(UIStoryboardSegue *)segue
 {
     if ([[segue identifier] isEqualToString:@"ReturnInputAddCate"]) {
@@ -406,7 +528,7 @@
                                                                  inManagedObjectContext:context] ;
             
             [category setName:addController.categoryInput.text];
-            
+            [category setScheduleType:@"none"];
             
             
             //save
@@ -1001,7 +1123,12 @@
     }
     
     
-    
+    if ([[segue identifier] isEqualToString:@"showStore"]) {
+        
+        
+        
+    }
+
     
 }
 

@@ -94,12 +94,10 @@
         if (addController.quoteInput!=nil && [addController.quoteInput.text length]) {
             //save the quote in core data that was input by  user in addQuote
             Quote *quote = self.quoteObject;
-
-           // NSDate *today = [NSDate date];
             quote.quoteEntry=addController.quoteInput.text;
-            //quote.timeStamp = today;
             quote.category = self.cate;
             quote.author = addController.authorInput.text;
+            quote.timeStamp=nil;
             
             [self.cate addQuoteObject:quote];
 

@@ -18,6 +18,8 @@
 
 @property (nonatomic) BOOL newQuotesScheduled;
 
+- (void)loadDataFromPropertyList:(NSString *)propertyList;
+
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

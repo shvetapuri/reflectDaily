@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Quotes</string>
+		<key>quoteEntry</key>
+		<array>
+			<string>TO BE OR NOT TO BE </string>
+			<string>Shakespeare</string>
+		</array>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>Other Quotes</string>
+		<key>quoteEntry</key>
+		<array>
+			<string>Life is a poor tale told by an idiot full of sound and fury, signifying nothing</string>
+			<string>Shakespeare</string>
+		</array>
+	</dict>
+</array>
+</plist>

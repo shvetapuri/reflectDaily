@@ -12,8 +12,12 @@
 		E60AA5B716D3248A0089D76C /* iReflectQuoteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60AA5B616D3248A0089D76C /* iReflectQuoteDetailViewController.m */; };
 		E60E15EF172213B300D8CCA3 /* iReflectEditQuoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E60E15EE172213B300D8CCA3 /* iReflectEditQuoteViewController.m */; };
 		E623854E17812B42006C82B3 /* fav_star.png in Resources */ = {isa = PBXBuildFile; fileRef = E623854D17812B42006C82B3 /* fav_star.png */; };
-		E623855017812C81006C82B3 /* wetleaf.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E623854F17812C81006C82B3 /* wetleaf.jpg */; };
 		E6238558178C9048006C82B3 /* quoteData.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6238557178C9048006C82B3 /* quoteData.plist */; };
+		E63915A817D19A1B00F2FB6E /* Famous Quotes Reflections Bundle.plist in Resources */ = {isa = PBXBuildFile; fileRef = E63915A717D19A1B00F2FB6E /* Famous Quotes Reflections Bundle.plist */; };
+		E63915AA17D27E2800F2FB6E /* Funny quotes bundle.plist in Resources */ = {isa = PBXBuildFile; fileRef = E63915A917D27E2800F2FB6E /* Funny quotes bundle.plist */; };
+		E63915B017D3F35400F2FB6E /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = E63915AD17D3F35400F2FB6E /* NSData+Base64.m */; };
+		E63915B117D3F35400F2FB6E /* VerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E63915AF17D3F35400F2FB6E /* VerificationController.m */; };
+		E63915B317D3F39300F2FB6E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E63915B217D3F39300F2FB6E /* Security.framework */; };
 		E653EB6D16979EEB00184C06 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E653EB6C16979EEB00184C06 /* UIKit.framework */; };
 		E653EB6F16979EEB00184C06 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E653EB6E16979EEB00184C06 /* Foundation.framework */; };
 		E653EB7116979EEB00184C06 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E653EB7016979EEB00184C06 /* CoreGraphics.framework */; };
@@ -30,7 +34,6 @@
 		E653EB9116979EEB00184C06 /* iReflectDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E653EB9016979EEB00184C06 /* iReflectDetailViewController.m */; };
 		E653EB9916979F4400184C06 /* iReflectScheduleQuotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E653EB9816979F4400184C06 /* iReflectScheduleQuotesViewController.m */; };
 		E65812A6171BBA0A003845FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65812A5171BBA0A003845FD /* QuartzCore.framework */; };
-		E65CCD1E178F1F0200A861CB /* topImage.png in Resources */ = {isa = PBXBuildFile; fileRef = E65CCD1D178F1F0200A861CB /* topImage.png */; };
 		E65CCD69179750B500A861CB /* iReflectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E65CCD68179750B500A861CB /* iReflectViewController.m */; };
 		E661B13F16CDEFFD0099FBE6 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = E661B13E16CDEFFD0099FBE6 /* View.xib */; };
 		E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E66AE571174C168C000E2A72 /* iReflectMainPageViewController.m */; };
@@ -38,6 +41,10 @@
 		E66AE576174D77A6000E2A72 /* star_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = E66AE575174D77A6000E2A72 /* star_gray.png */; };
 		E675D60117A841F600A70B8F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E675D60017A841F500A70B8F /* StoreKit.framework */; };
 		E675D60417A8424C00A70B8F /* InAppPurchaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E675D60317A8424B00A70B8F /* InAppPurchaseManager.m */; };
+		E67C105617CC0FCB00B41BD8 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C105517CC0FCB00B41BD8 /* IAPHelper.m */; };
+		E67C105917CC113900B41BD8 /* iReflectIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C105817CC113900B41BD8 /* iReflectIAPHelper.m */; };
+		E67C105F17CC4DFB00B41BD8 /* iReflectIAPTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E67C105E17CC4DFB00B41BD8 /* iReflectIAPTableViewController.m */; };
+		E67C106317CEACA300B41BD8 /* topImage.png in Resources */ = {isa = PBXBuildFile; fileRef = E67C106217CEACA300B41BD8 /* topImage.png */; };
 		E68E079016AA5C680046FF41 /* Quote.m in Sources */ = {isa = PBXBuildFile; fileRef = E68E078F16AA5C680046FF41 /* Quote.m */; };
 		E68E079316AA5C900046FF41 /* Categories.m in Sources */ = {isa = PBXBuildFile; fileRef = E68E079216AA5C900046FF41 /* Categories.m */; };
 		E6B087B716BDB62E000BE8D1 /* iReflectAddQuoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B087B616BDB62E000BE8D1 /* iReflectAddQuoteViewController.m */; };
@@ -57,8 +64,14 @@
 		E60E15ED172213B200D8CCA3 /* iReflectEditQuoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectEditQuoteViewController.h; sourceTree = "<group>"; };
 		E60E15EE172213B300D8CCA3 /* iReflectEditQuoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectEditQuoteViewController.m; sourceTree = "<group>"; };
 		E623854D17812B42006C82B3 /* fav_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fav_star.png; sourceTree = "<group>"; };
-		E623854F17812C81006C82B3 /* wetleaf.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wetleaf.jpg; sourceTree = "<group>"; };
 		E6238557178C9048006C82B3 /* quoteData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = quoteData.plist; sourceTree = "<group>"; };
+		E63915A717D19A1B00F2FB6E /* Famous Quotes Reflections Bundle.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Famous Quotes Reflections Bundle.plist"; sourceTree = "<group>"; };
+		E63915A917D27E2800F2FB6E /* Funny quotes bundle.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Funny quotes bundle.plist"; sourceTree = "<group>"; };
+		E63915AC17D3F35400F2FB6E /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		E63915AD17D3F35400F2FB6E /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		E63915AE17D3F35400F2FB6E /* VerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerificationController.h; sourceTree = "<group>"; };
+		E63915AF17D3F35400F2FB6E /* VerificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationController.m; sourceTree = "<group>"; };
+		E63915B217D3F39300F2FB6E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E653EB6816979EEB00184C06 /* iReflect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iReflect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E653EB6C16979EEB00184C06 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E653EB6E16979EEB00184C06 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -82,7 +95,6 @@
 		E653EB9716979F4400184C06 /* iReflectScheduleQuotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectScheduleQuotesViewController.h; sourceTree = "<group>"; };
 		E653EB9816979F4400184C06 /* iReflectScheduleQuotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectScheduleQuotesViewController.m; sourceTree = "<group>"; };
 		E65812A5171BBA0A003845FD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		E65CCD1D178F1F0200A861CB /* topImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topImage.png; sourceTree = "<group>"; };
 		E65CCD67179750B500A861CB /* iReflectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectViewController.h; sourceTree = "<group>"; };
 		E65CCD68179750B500A861CB /* iReflectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectViewController.m; sourceTree = "<group>"; };
 		E661B13E16CDEFFD0099FBE6 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
@@ -93,6 +105,13 @@
 		E675D60017A841F500A70B8F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E675D60217A8424B00A70B8F /* InAppPurchaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchaseManager.h; sourceTree = "<group>"; };
 		E675D60317A8424B00A70B8F /* InAppPurchaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchaseManager.m; sourceTree = "<group>"; };
+		E67C105417CC0FCB00B41BD8 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
+		E67C105517CC0FCB00B41BD8 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
+		E67C105717CC113900B41BD8 /* iReflectIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectIAPHelper.h; sourceTree = "<group>"; };
+		E67C105817CC113900B41BD8 /* iReflectIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectIAPHelper.m; sourceTree = "<group>"; };
+		E67C105D17CC4DFB00B41BD8 /* iReflectIAPTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iReflectIAPTableViewController.h; sourceTree = SOURCE_ROOT; };
+		E67C105E17CC4DFB00B41BD8 /* iReflectIAPTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iReflectIAPTableViewController.m; sourceTree = SOURCE_ROOT; };
+		E67C106217CEACA300B41BD8 /* topImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = topImage.png; path = ../../Documents/iphone/iReflectPics/topImage.png; sourceTree = "<group>"; };
 		E68E078E16AA5C680046FF41 /* Quote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quote.h; path = ../Quote.h; sourceTree = "<group>"; };
 		E68E078F16AA5C680046FF41 /* Quote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Quote.m; path = ../Quote.m; sourceTree = "<group>"; };
 		E68E079116AA5C8F0046FF41 /* Categories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Categories.h; sourceTree = "<group>"; };
@@ -114,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E63915B317D3F39300F2FB6E /* Security.framework in Frameworks */,
 				E675D60117A841F600A70B8F /* StoreKit.framework in Frameworks */,
 				E65812A6171BBA0A003845FD /* QuartzCore.framework in Frameworks */,
 				E653EB6D16979EEB00184C06 /* UIKit.framework in Frameworks */,
@@ -126,16 +146,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E63915AB17D3F35400F2FB6E /* VerificationController */ = {
+			isa = PBXGroup;
+			children = (
+				E63915AC17D3F35400F2FB6E /* NSData+Base64.h */,
+				E63915AD17D3F35400F2FB6E /* NSData+Base64.m */,
+				E63915AE17D3F35400F2FB6E /* VerificationController.h */,
+				E63915AF17D3F35400F2FB6E /* VerificationController.m */,
+			);
+			path = VerificationController;
+			sourceTree = "<group>";
+		};
 		E653EB5D16979EEB00184C06 = {
 			isa = PBXGroup;
 			children = (
+				E63915B217D3F39300F2FB6E /* Security.framework */,
 				E6E050BD173AF47600BC2CAE /* IMG_2010.PNG */,
 				E60A327C1724F37A00A56871 /* iReflectIcon_114.png */,
-				E623854F17812C81006C82B3 /* wetleaf.jpg */,
 				E6D1ECE7172C815300EAE7FD /* tabBar_textured_32.png */,
 				E6D1ECE9172C815900EAE7FD /* tabBar_textured_44.png */,
-				E65CCD1D178F1F0200A861CB /* topImage.png */,
 				E6D1ECE5172C7B5F00EAE7FD /* tableview_bkgnd.png */,
+				E67C106217CEACA300B41BD8 /* topImage.png */,
 				E60A327E1724F38300A56871 /* iReflectIcon_57.png */,
 				E623854D17812B42006C82B3 /* fav_star.png */,
 				E66AE575174D77A6000E2A72 /* star_gray.png */,
@@ -170,6 +201,13 @@
 		E653EB7416979EEB00184C06 /* iReflect */ = {
 			isa = PBXGroup;
 			children = (
+				E63915AB17D3F35400F2FB6E /* VerificationController */,
+				E67C105417CC0FCB00B41BD8 /* IAPHelper.h */,
+				E67C105517CC0FCB00B41BD8 /* IAPHelper.m */,
+				E67C105717CC113900B41BD8 /* iReflectIAPHelper.h */,
+				E67C105817CC113900B41BD8 /* iReflectIAPHelper.m */,
+				E67C105D17CC4DFB00B41BD8 /* iReflectIAPTableViewController.h */,
+				E67C105E17CC4DFB00B41BD8 /* iReflectIAPTableViewController.m */,
 				E675D60217A8424B00A70B8F /* InAppPurchaseManager.h */,
 				E675D60317A8424B00A70B8F /* InAppPurchaseManager.m */,
 				E653EB7D16979EEB00184C06 /* iReflectAppDelegate.h */,
@@ -210,6 +248,8 @@
 			isa = PBXGroup;
 			children = (
 				E653EB7616979EEB00184C06 /* iReflect-Info.plist */,
+				E63915A717D19A1B00F2FB6E /* Famous Quotes Reflections Bundle.plist */,
+				E63915A917D27E2800F2FB6E /* Funny quotes bundle.plist */,
 				E6238557178C9048006C82B3 /* quoteData.plist */,
 				E653EB7716979EEB00184C06 /* InfoPlist.strings */,
 				E653EB7A16979EEB00184C06 /* main.m */,
@@ -288,9 +328,10 @@
 				E66AE574174D7070000E2A72 /* star.png in Resources */,
 				E66AE576174D77A6000E2A72 /* star_gray.png in Resources */,
 				E623854E17812B42006C82B3 /* fav_star.png in Resources */,
-				E623855017812C81006C82B3 /* wetleaf.jpg in Resources */,
 				E6238558178C9048006C82B3 /* quoteData.plist in Resources */,
-				E65CCD1E178F1F0200A861CB /* topImage.png in Resources */,
+				E67C106317CEACA300B41BD8 /* topImage.png in Resources */,
+				E63915A817D19A1B00F2FB6E /* Famous Quotes Reflections Bundle.plist in Resources */,
+				E63915AA17D27E2800F2FB6E /* Funny quotes bundle.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +358,11 @@
 				E66AE572174C168C000E2A72 /* iReflectMainPageViewController.m in Sources */,
 				E65CCD69179750B500A861CB /* iReflectViewController.m in Sources */,
 				E675D60417A8424C00A70B8F /* InAppPurchaseManager.m in Sources */,
+				E67C105617CC0FCB00B41BD8 /* IAPHelper.m in Sources */,
+				E67C105917CC113900B41BD8 /* iReflectIAPHelper.m in Sources */,
+				E67C105F17CC4DFB00B41BD8 /* iReflectIAPTableViewController.m in Sources */,
+				E63915B017D3F35400F2FB6E /* NSData+Base64.m in Sources */,
+				E63915B117D3F35400F2FB6E /* VerificationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,11 +440,15 @@
 		E653EB9516979EEB00184C06 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Shveta Puri (MC66CDK43D)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shveta Puri (MC66CDK43D)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iReflect/iReflect-Prefix.pch";
 				INFOPLIST_FILE = "iReflect/iReflect-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "CADBB6DE-5AD1-4133-814D-4422F918848D";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CADBB6DE-5AD1-4133-814D-4422F918848D";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
